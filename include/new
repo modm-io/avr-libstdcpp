@@ -37,7 +37,7 @@
 #pragma GCC system_header
 
 #include <bits/c++config.h>
-#include <exception>
+#include <stddef>
 
 #pragma GCC visibility push(default)
 
@@ -45,40 +45,6 @@ extern "C++" {
 
 namespace std 
 {
-  /**
-   *  @brief  Exception possibly thrown by @c new.
-   *  @ingroup exceptions
-   *
-   *  @c bad_alloc (or classes derived from it) is used to report allocation
-   *  errors from the throwing forms of @c new.  */
-  class bad_alloc : public exception 
-  {
-  public:
-    bad_alloc() throw() { }
-
-    // This declaration is not useless:
-    // http://gcc.gnu.org/onlinedocs/gcc-3.0.2/gcc_6.html#SEC118
-    virtual ~bad_alloc() throw();
-
-    // See comment in eh_exception.cc.
-    virtual const char* what() const throw();
-  };
-
-#if __cplusplus >= 201103L
-  class bad_array_new_length : public bad_alloc
-  {
-  public:
-    bad_array_new_length() throw() { }
-
-    // This declaration is not useless:
-    // http://gcc.gnu.org/onlinedocs/gcc-3.0.2/gcc_6.html#SEC118
-    virtual ~bad_array_new_length() throw();
-
-    // See comment in eh_exception.cc.
-    virtual const char* what() const throw();
-  };
-#endif
-
 #if __cpp_aligned_new
   enum class align_val_t: size_t {};
 #endif
@@ -91,19 +57,6 @@ namespace std
   };
 
   extern const nothrow_t nothrow;
-
-  /** If you write your own error handler to be called by @c new, it must
-   *  be of this type.  */
-  typedef void (*new_handler)();
-
-  /// Takes a replacement handler as the argument, returns the
-  /// previous handler.
-  new_handler set_new_handler(new_handler) throw();
-
-#if __cplusplus >= 201103L
-  /// Return the current new handler.
-  new_handler get_new_handler() noexcept;
-#endif
 } // namespace std
 
 //@{
@@ -139,7 +92,8 @@ void operator delete(void*, const std::nothrow_t&) _GLIBCXX_USE_NOEXCEPT
   __attribute__((__externally_visible__));
 void operator delete[](void*, const std::nothrow_t&) _GLIBCXX_USE_NOEXCEPT
   __attribute__((__externally_visible__));
-#if __cpp_aligned_new
+// disabled
+#if 0
 void* operator new(std::size_t, std::align_val_t)
   __attribute__((__externally_visible__));
 void* operator new(std::size_t, std::align_val_t, const std::nothrow_t&)
