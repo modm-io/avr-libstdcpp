@@ -74,6 +74,9 @@
 #undef tan
 #undef tanh
 
+// avr-libc does not provide float or long overloads of any math function!
+#define __CORRECT_ISO_CPP_MATH_H_PROTO 1
+
 extern "C++"
 {
 namespace std _GLIBCXX_VISIBILITY(default)

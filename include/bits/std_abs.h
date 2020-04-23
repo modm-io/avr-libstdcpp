@@ -36,9 +36,6 @@
 
 #define _GLIBCXX_INCLUDE_NEXT_C_HEADERS
 #include_next <stdlib.h>
-#ifdef __CORRECT_ISO_CPP_MATH_H_PROTO
-# include_next <math.h>
-#endif
 #undef _GLIBCXX_INCLUDE_NEXT_C_HEADERS
 
 #undef abs
@@ -65,7 +62,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 // 2192. Validity and return type of std::abs(0u) is unclear
 // 2294. <cstdlib> should declare abs(double)
 
-#ifndef __CORRECT_ISO_CPP_MATH_H_PROTO
   inline _GLIBCXX_CONSTEXPR double
   abs(double __x)
   { return __builtin_fabs(__x); }
@@ -77,7 +73,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   inline _GLIBCXX_CONSTEXPR long double
   abs(long double __x)
   { return __builtin_fabsl(__x); }
-#endif
 
 #if defined(__GLIBCXX_TYPE_INT_N_0)
   inline _GLIBCXX_CONSTEXPR __GLIBCXX_TYPE_INT_N_0
