@@ -30,13 +30,13 @@ allocate(size_t size) _GLIBCXX_USE_NOEXCEPT
 }
 
 void *
-operator new(size_t size) _GLIBCXX_USE_NOEXCEPT
+operator new(size_t size)
 {
 	return allocate<true>(size);
 }
 
 void *
-operator new[](size_t size) _GLIBCXX_USE_NOEXCEPT
+operator new[](size_t size)
 {
 	return allocate<true>(size);
 }
