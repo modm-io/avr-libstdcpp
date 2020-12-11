@@ -39,7 +39,7 @@ $(BUILD_DIR)/%.cc.o: %.cc
 	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
 
 size: $(TARGET).elf
-	avr-size --mcu=$(MCU) -C $(TARGET).elf
+	avr-objdump -Pmem-usage $(TARGET).elf
 
 program: $(TARGET).hex
 	avrdude -p$(MCU) $(AVRDUDE_FLAGS) -c$(PROGRAMMER) -Uflash:w:$(TARGET).hex:a
