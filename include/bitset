@@ -44,10 +44,8 @@
 
 #pragma GCC system_header
 
-#include <string>
 #include <bits/functexcept.h>   // For invalid_argument, out_of_range,
                                 // overflow_error
-#include <iosfwd>
 #include <bits/cxxabi_forced.h>
 
 #if __cplusplus >= 201103L
@@ -708,31 +706,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
    *  Thus, unlike other containers, a %bitset's index <em>counts from
    *  right to left</em>, to put it very loosely.
    *
-   *  This behavior is preserved when translating to and from strings.  For
-   *  example, the first line of the following program probably prints
-   *  <em>b(&apos;a&apos;) is 0001100001</em> on a modern ASCII system.
-   *
-   *  @code
-   *     #include <bitset>
-   *     #include <iostream>
-   *     #include <sstream>
-   *
-   *     using namespace std;
-   *
-   *     int main()
-   *     {
-   *         long         a = 'a';
-   *         bitset<10>   b(a);
-   *
-   *         cout << "b('a') is " << b << endl;
-   *
-   *         ostringstream s;
-   *         s << b;
-   *         string  str = s.str();
-   *         cout << "index 3 in the string is " << str[3] << " but\n"
-   *              << "index 3 in the bitset is " << b[3] << endl;
-   *     }
-   *  @endcode
    *
    *  Also see:
    *  https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_containers.html
@@ -754,18 +727,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
     private:
       typedef _Base_bitset<_GLIBCXX_BITSET_WORDS(_Nb)> _Base;
       typedef unsigned long _WordT;
-
-      template<class _CharT, class _Traits, class _Alloc>
-      void
-      _M_check_initial_position(const std::basic_string<_CharT, _Traits, _Alloc>& __s,
-				size_t __position) const
-      {
-	if (__position > __s.size())
-	  __throw_out_of_range_fmt(__N("bitset::bitset: __position "
-				       "(which is %zu) > __s.size() "
-				       "(which is %zu)"),
-				   __position, __s.size());
-      }
 
       void _M_check(size_t __position, const char *__s) const
       {
@@ -877,87 +838,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       bitset(unsigned long __val)
       : _Base(__val)
       { _M_do_sanitize(); }
-#endif
-
-      /**
-       *  Use a subset of a string.
-       *  @param  __s  A string of @a 0 and @a 1 characters.
-       *  @param  __position  Index of the first character in @a __s to use;
-       *                    defaults to zero.
-       *  @throw  std::out_of_range  If @a pos is bigger the size of @a __s.
-       *  @throw  std::invalid_argument  If a character appears in the string
-       *                                 which is neither @a 0 nor @a 1.
-       */
-      template<class _CharT, class _Traits, class _Alloc>
-	explicit
-	bitset(const std::basic_string<_CharT, _Traits, _Alloc>& __s,
-	       size_t __position = 0)
-	: _Base()
-	{
-	  _M_check_initial_position(__s, __position);
-	  _M_copy_from_string(__s, __position,
-			      std::basic_string<_CharT, _Traits, _Alloc>::npos,
-			      _CharT('0'), _CharT('1'));
-	}
-
-      /**
-       *  Use a subset of a string.
-       *  @param  __s  A string of @a 0 and @a 1 characters.
-       *  @param  __position  Index of the first character in @a __s to use.
-       *  @param  __n    The number of characters to copy.
-       *  @throw std::out_of_range If @a __position is bigger the size
-       *  of @a __s.
-       *  @throw  std::invalid_argument  If a character appears in the string
-       *                                 which is neither @a 0 nor @a 1.
-       */
-      template<class _CharT, class _Traits, class _Alloc>
-	bitset(const std::basic_string<_CharT, _Traits, _Alloc>& __s,
-	       size_t __position, size_t __n)
-	: _Base()
-	{
-	  _M_check_initial_position(__s, __position);
-	  _M_copy_from_string(__s, __position, __n, _CharT('0'), _CharT('1'));
-	}
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 396. what are characters zero and one.
-      template<class _CharT, class _Traits, class _Alloc>
-	bitset(const std::basic_string<_CharT, _Traits, _Alloc>& __s,
-	       size_t __position, size_t __n,
-	       _CharT __zero, _CharT __one = _CharT('1'))
-	: _Base()
-	{
-	  _M_check_initial_position(__s, __position);
-	  _M_copy_from_string(__s, __position, __n, __zero, __one);
-	}
-
-#if __cplusplus >= 201103L
-      /**
-       *  Construct from a character %array.
-       *  @param  __str  An %array of characters @a zero and @a one.
-       *  @param  __n    The number of characters to use.
-       *  @param  __zero The character corresponding to the value 0.
-       *  @param  __one  The character corresponding to the value 1.
-       *  @throw  std::invalid_argument If a character appears in the string
-       *                                which is neither @a __zero nor @a __one.
-       */
-      template<typename _CharT>
-        explicit
-        bitset(const _CharT* __str,
-	       typename std::basic_string<_CharT>::size_type __n
-	       = std::basic_string<_CharT>::npos,
-	       _CharT __zero = _CharT('0'), _CharT __one = _CharT('1'))
-        : _Base()
-        {
-	  if (!__str)
-	    __throw_logic_error(__N("bitset::bitset(const _CharT*, ...)"));
-
-	  if (__n == std::basic_string<_CharT>::npos)
-	    __n = std::char_traits<_CharT>::length(__str);
-	  _M_copy_from_ptr<_CharT, std::char_traits<_CharT>>(__str, __n, 0,
-							     __n, __zero,
-							     __one);
-	}
 #endif
 
       // 23.3.5.2 bitset operations:
@@ -1184,112 +1064,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       { return this->_M_do_to_ullong(); }
 #endif
 
-      /**
-       *  @brief Returns a character interpretation of the %bitset.
-       *  @return  The string equivalent of the bits.
-       *
-       *  Note the ordering of the bits:  decreasing character positions
-       *  correspond to increasing bit positions (see the main class notes for
-       *  an example).
-       */
-      template<class _CharT, class _Traits, class _Alloc>
-	std::basic_string<_CharT, _Traits, _Alloc>
-	to_string() const
-	{
-	  std::basic_string<_CharT, _Traits, _Alloc> __result;
-	  _M_copy_to_string(__result, _CharT('0'), _CharT('1'));
-	  return __result;
-	}
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 396. what are characters zero and one.
-      template<class _CharT, class _Traits, class _Alloc>
-	std::basic_string<_CharT, _Traits, _Alloc>
-	to_string(_CharT __zero, _CharT __one = _CharT('1')) const
-	{
-	  std::basic_string<_CharT, _Traits, _Alloc> __result;
-	  _M_copy_to_string(__result, __zero, __one);
-	  return __result;
-	}
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 434. bitset::to_string() hard to use.
-      template<class _CharT, class _Traits>
-	std::basic_string<_CharT, _Traits, std::allocator<_CharT> >
-	to_string() const
-	{ return to_string<_CharT, _Traits, std::allocator<_CharT> >(); }
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 853. to_string needs updating with zero and one.
-      template<class _CharT, class _Traits>
-	std::basic_string<_CharT, _Traits, std::allocator<_CharT> >
-	to_string(_CharT __zero, _CharT __one = _CharT('1')) const
-	{ return to_string<_CharT, _Traits,
-	                   std::allocator<_CharT> >(__zero, __one); }
-
-      template<class _CharT>
-	std::basic_string<_CharT, std::char_traits<_CharT>,
-	                  std::allocator<_CharT> >
-	to_string() const
-	{
-	  return to_string<_CharT, std::char_traits<_CharT>,
-	                   std::allocator<_CharT> >();
-	}
-
-      template<class _CharT>
-	std::basic_string<_CharT, std::char_traits<_CharT>,
-	                  std::allocator<_CharT> >
-	to_string(_CharT __zero, _CharT __one = _CharT('1')) const
-	{
-	  return to_string<_CharT, std::char_traits<_CharT>,
-	                   std::allocator<_CharT> >(__zero, __one);
-	}
-
-      std::basic_string<char, std::char_traits<char>, std::allocator<char> >
-      to_string() const
-      {
-	return to_string<char, std::char_traits<char>,
-	                 std::allocator<char> >();
-      }
-
-      std::basic_string<char, std::char_traits<char>, std::allocator<char> >
-      to_string(char __zero, char __one = '1') const
-      {
-	return to_string<char, std::char_traits<char>,
-	                 std::allocator<char> >(__zero, __one);
-      }
-
-      // Helper functions for string operations.
-      template<class _CharT, class _Traits>
-        void
-        _M_copy_from_ptr(const _CharT*, size_t, size_t, size_t,
-			 _CharT, _CharT);
-
-      template<class _CharT, class _Traits, class _Alloc>
-	void
-	_M_copy_from_string(const std::basic_string<_CharT,
-			    _Traits, _Alloc>& __s, size_t __pos, size_t __n,
-			    _CharT __zero, _CharT __one)
-	{ _M_copy_from_ptr<_CharT, _Traits>(__s.data(), __s.size(), __pos, __n,
-					    __zero, __one); }
-
-      template<class _CharT, class _Traits, class _Alloc>
-	void
-        _M_copy_to_string(std::basic_string<_CharT, _Traits, _Alloc>&,
-			  _CharT, _CharT) const;
-
-      // NB: Backward compat.
-      template<class _CharT, class _Traits, class _Alloc>
-	void
-	_M_copy_from_string(const std::basic_string<_CharT,
-			    _Traits, _Alloc>& __s, size_t __pos, size_t __n)
-	{ _M_copy_from_string(__s, __pos, __n, _CharT('0'), _CharT('1')); }
-
-      template<class _CharT, class _Traits, class _Alloc>
-	void
-        _M_copy_to_string(std::basic_string<_CharT, _Traits,_Alloc>& __s) const
-	{ _M_copy_to_string(__s, _CharT('0'), _CharT('1')); }
-
       /// Returns the number of bits which are set.
       size_t
       count() const _GLIBCXX_NOEXCEPT
@@ -1385,41 +1159,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       { return this->_M_do_find_next(__prev, _Nb); }
     };
 
-  // Definitions of non-inline member functions.
-  template<size_t _Nb>
-    template<class _CharT, class _Traits>
-      void
-      bitset<_Nb>::
-      _M_copy_from_ptr(const _CharT* __s, size_t __len,
-		       size_t __pos, size_t __n, _CharT __zero, _CharT __one)
-      {
-	reset();
-	const size_t __nbits = std::min(_Nb, std::min(__n, size_t(__len - __pos)));
-	for (size_t __i = __nbits; __i > 0; --__i)
-	  {
-	    const _CharT __c = __s[__pos + __nbits - __i];
-	    if (_Traits::eq(__c, __zero))
-	      ;
-	    else if (_Traits::eq(__c, __one))
-	      _Unchecked_set(__i - 1);
-	    else
-	      __throw_invalid_argument(__N("bitset::_M_copy_from_ptr"));
-	  }
-      }
-
-  template<size_t _Nb>
-    template<class _CharT, class _Traits, class _Alloc>
-      void
-      bitset<_Nb>::
-      _M_copy_to_string(std::basic_string<_CharT, _Traits, _Alloc>& __s,
-			_CharT __zero, _CharT __one) const
-      {
-	__s.assign(_Nb, __zero);
-	for (size_t __i = _Nb; __i > 0; --__i)
-	  if (_Unchecked_test(__i - 1))
-	    _Traits::assign(__s[_Nb - __i], __one);
-      }
-
   // 23.3.5.3 bitset operations:
   //@{
   /**
@@ -1455,98 +1194,6 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       bitset<_Nb> __result(__x);
       __result ^= __y;
       return __result;
-    }
-  //@}
-
-  //@{
-  /**
-   *  @brief Global I/O operators for bitsets.
-   *
-   *  Direct I/O between streams and bitsets is supported.  Output is
-   *  straightforward.  Input will skip whitespace, only accept @a 0 and @a 1
-   *  characters, and will only extract as many digits as the %bitset will
-   *  hold.
-  */
-  template<class _CharT, class _Traits, size_t _Nb>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is, bitset<_Nb>& __x)
-    {
-      typedef typename _Traits::char_type          char_type;
-      typedef std::basic_istream<_CharT, _Traits>  __istream_type;
-      typedef typename __istream_type::ios_base    __ios_base;
-
-      std::basic_string<_CharT, _Traits> __tmp;
-      __tmp.reserve(_Nb);
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 303. Bitset input operator underspecified
-      const char_type __zero = __is.widen('0');
-      const char_type __one = __is.widen('1');
-
-      typename __ios_base::iostate __state = __ios_base::goodbit;
-      typename __istream_type::sentry __sentry(__is);
-      if (__sentry)
-	{
-	  __try
-	    {
-	      for (size_t __i = _Nb; __i > 0; --__i)
-		{
-		  static typename _Traits::int_type __eof = _Traits::eof();
-
-		  typename _Traits::int_type __c1 = __is.rdbuf()->sbumpc();
-		  if (_Traits::eq_int_type(__c1, __eof))
-		    {
-		      __state |= __ios_base::eofbit;
-		      break;
-		    }
-		  else
-		    {
-		      const char_type __c2 = _Traits::to_char_type(__c1);
-		      if (_Traits::eq(__c2, __zero))
-			__tmp.push_back(__zero);
-		      else if (_Traits::eq(__c2, __one))
-			__tmp.push_back(__one);
-		      else if (_Traits::
-			       eq_int_type(__is.rdbuf()->sputbackc(__c2),
-					   __eof))
-			{
-			  __state |= __ios_base::failbit;
-			  break;
-			}
-		    }
-		}
-	    }
-	  __catch(__cxxabiv1::__forced_unwind&)
-	    {
-	      __is._M_setstate(__ios_base::badbit);
-	      __throw_exception_again;
-	    }
-	  __catch(...)
-	    { __is._M_setstate(__ios_base::badbit); }
-	}
-
-      if (__tmp.empty() && _Nb)
-	__state |= __ios_base::failbit;
-      else
-	__x._M_copy_from_string(__tmp, static_cast<size_t>(0), _Nb,
-				__zero, __one);
-      if (__state)
-	__is.setstate(__state);
-      return __is;
-    }
-
-  template <class _CharT, class _Traits, size_t _Nb>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const bitset<_Nb>& __x)
-    {
-      std::basic_string<_CharT, _Traits> __tmp;
-
-      // _GLIBCXX_RESOLVE_LIB_DEFECTS
-      // 396. what are characters zero and one.
-      const ctype<_CharT>& __ct = use_facet<ctype<_CharT> >(__os.getloc());
-      __x._M_copy_to_string(__tmp, __ct.widen('0'), __ct.widen('1'));
-      return __os << __tmp;
     }
   //@}
 
