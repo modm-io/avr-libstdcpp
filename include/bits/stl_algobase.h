@@ -428,35 +428,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	}
     };
 
-  // Helpers for streambuf iterators (either istream or ostream).
-  // NB: avoid including <iosfwd>, relatively large.
-  template<typename _CharT>
-    struct char_traits;
-
-  template<typename _CharT, typename _Traits>
-    class istreambuf_iterator;
-
-  template<typename _CharT, typename _Traits>
-    class ostreambuf_iterator;
-
-  template<bool _IsMove, typename _CharT>
-    typename __gnu_cxx::__enable_if<__is_char<_CharT>::__value,
-	     ostreambuf_iterator<_CharT, char_traits<_CharT> > >::__type
-    __copy_move_a2(_CharT*, _CharT*,
-		   ostreambuf_iterator<_CharT, char_traits<_CharT> >);
-
-  template<bool _IsMove, typename _CharT>
-    typename __gnu_cxx::__enable_if<__is_char<_CharT>::__value,
-	     ostreambuf_iterator<_CharT, char_traits<_CharT> > >::__type
-    __copy_move_a2(const _CharT*, const _CharT*,
-		   ostreambuf_iterator<_CharT, char_traits<_CharT> >);
-
-  template<bool _IsMove, typename _CharT>
-    typename __gnu_cxx::__enable_if<__is_char<_CharT>::__value,
-				    _CharT*>::__type
-    __copy_move_a2(istreambuf_iterator<_CharT, char_traits<_CharT> >,
-		   istreambuf_iterator<_CharT, char_traits<_CharT> >, _CharT*);
-
   template<bool _IsMove, typename _II, typename _OI>
     _GLIBCXX20_CONSTEXPR
     inline _OI

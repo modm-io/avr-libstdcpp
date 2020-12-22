@@ -725,11 +725,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       return __result;
     }
  
-  template<typename _CharT, typename _Size>
-    __enable_if_t<__is_char<_CharT>::__value, _CharT*>
-    __copy_n_a(istreambuf_iterator<_CharT, char_traits<_CharT>>,
-	       _Size, _CharT*);
-
   template<typename _InputIterator, typename _Size, typename _OutputIterator>
     _GLIBCXX20_CONSTEXPR
     _OutputIterator
