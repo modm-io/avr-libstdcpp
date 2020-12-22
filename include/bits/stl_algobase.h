@@ -2060,11 +2060,4 @@ _GLIBCXX_END_NAMESPACE_ALGO
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
 
-// NB: This file is included within many other C++ includes, as a way
-// of getting the base algorithms. So, make sure that parallel bits
-// come in too if requested.
-#ifdef _GLIBCXX_PARALLEL
-# include <parallel/algobase.h>
-#endif
-
 #endif

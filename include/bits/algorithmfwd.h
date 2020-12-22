@@ -959,9 +959,5 @@ _GLIBCXX_END_NAMESPACE_ALGO
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
 
-#ifdef _GLIBCXX_PARALLEL
-# include <parallel/algorithmfwd.h>
-#endif
-
 #endif
 
