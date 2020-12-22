@@ -1,6 +1,6 @@
 // Functions used by iterators -*- C++ -*-
 
-// Copyright (C) 2001-2018 Free Software Foundation, Inc.
+// Copyright (C) 2001-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -104,7 +104,7 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
       return __last - __first;
     }
 
-#ifdef _GLIBCXX_USE_CXX11_ABI
+#if _GLIBCXX_USE_CXX11_ABI
   // Forward declaration because of the qualified call in distance.
   template<typename _Tp>
     ptrdiff_t

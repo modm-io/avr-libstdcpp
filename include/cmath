@@ -1,6 +1,6 @@
 // -*- C++ -*- C forwarding header.
 
-// Copyright (C) 1997-2018 Free Software Foundation, Inc.
+// Copyright (C) 1997-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -73,9 +73,6 @@
 #undef sqrt
 #undef tan
 #undef tanh
-
-// avr-libc does not provide float or long overloads of any math function!
-#define __CORRECT_ISO_CPP_MATH_H_PROTO 1
 
 extern "C++"
 {
@@ -534,6 +531,31 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #undef isunordered
 
 #if __cplusplus >= 201103L
+
+#ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_FP
+  constexpr int
+  fpclassify(float __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+				FP_SUBNORMAL, FP_ZERO, __x); }
+
+  constexpr int
+  fpclassify(double __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+				FP_SUBNORMAL, FP_ZERO, __x); }
+
+  constexpr int
+  fpclassify(long double __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+				FP_SUBNORMAL, FP_ZERO, __x); }
+#endif
+
+#ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_INT
+  template<typename _Tp>
+    constexpr typename __gnu_cxx::__enable_if<__is_integer<_Tp>::__value,
+                                              int>::__type
+    fpclassify(_Tp __x)
+    { return __x != 0 ? FP_NORMAL : FP_ZERO; }
+#endif
 
 #ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_FP
   constexpr bool
@@ -1040,31 +1062,73 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #undef truncl
 
   // types
-  using double_t = double;
-  using float_t = float;
+  using ::double_t;
+  using ::float_t;
 
   // functions
+  using ::acosh;
+  using ::acoshf;
+  using ::acoshl;
+
+  using ::asinh;
+  using ::asinhf;
+  using ::asinhl;
+
+  using ::atanh;
+  using ::atanhf;
+  using ::atanhl;
 
   using ::cbrt;
-  inline float cbrtf(float __x) { return ::cbrt(__x); }
+  using ::cbrtf;
+  using ::cbrtl;
 
   using ::copysign;
-  inline float copysignf(float __x, float __y) { return ::copysign(__x, __y); }
+  using ::copysignf;
+  using ::copysignl;
+
+  using ::erf;
+  using ::erff;
+  using ::erfl;
+
+  using ::erfc;
+  using ::erfcf;
+  using ::erfcl;
+
+  using ::exp2;
+  using ::exp2f;
+  using ::exp2l;
+
+  using ::expm1;
+  using ::expm1f;
+  using ::expm1l;
 
   using ::fdim;
-  inline float fdimf(float __x, float __y) { return ::fdim(__x, __y); }
+  using ::fdimf;
+  using ::fdiml;
 
   using ::fma;
-  inline float fmaf(float __x, float __y, float __z) { return ::fma(__x, __y, __z); }
+  using ::fmaf;
+  using ::fmal;
 
   using ::fmax;
-  inline float fmaxf(float __x, float __y) { return ::fmax(__x, __y); }
+  using ::fmaxf;
+  using ::fmaxl;
 
   using ::fmin;
-  inline float fminf(float __x, float __y) { return ::fmin(__x, __y); }
+  using ::fminf;
+  using ::fminl;
 
   using ::hypot;
-  inline float hypotf(float __x, float __y) { return ::hypot(__x, __y); }
+  using ::hypotf;
+  using ::hypotl;
+
+  using ::ilogb;
+  using ::ilogbf;
+  using ::ilogbl;
+
+  using ::lgamma;
+  using ::lgammaf;
+  using ::lgammal;
 
 #ifndef _GLIBCXX_NO_C99_ROUNDING_FUNCS
   using ::llrint;
@@ -1076,17 +1140,73 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   using ::llroundl;
 #endif
 
+  using ::log1p;
+  using ::log1pf;
+  using ::log1pl;
+
+  using ::log2;
+  using ::log2f;
+  using ::log2l;
+
+  using ::logb;
+  using ::logbf;
+  using ::logbl;
+
   using ::lrint;
-  inline float lrintf(float __x) { return ::lrint(__x); }
+  using ::lrintf;
+  using ::lrintl;
 
   using ::lround;
-  inline float lroundf(float __x) { return ::lround(__x); }
+  using ::lroundf;
+  using ::lroundl;
+
+  using ::nan;
+  using ::nanf;
+  using ::nanl;
+
+  using ::nearbyint;
+  using ::nearbyintf;
+  using ::nearbyintl;
+
+  using ::nextafter;
+  using ::nextafterf;
+  using ::nextafterl;
+
+  using ::nexttoward;
+  using ::nexttowardf;
+  using ::nexttowardl;
+
+  using ::remainder;
+  using ::remainderf;
+  using ::remainderl;
+
+  using ::remquo;
+  using ::remquof;
+  using ::remquol;
+
+  using ::rint;
+  using ::rintf;
+  using ::rintl;
 
   using ::round;
-  inline float roundf(float __x) { return ::round(__x); }
+  using ::roundf;
+  using ::roundl;
+
+  using ::scalbln;
+  using ::scalblnf;
+  using ::scalblnl;
+
+  using ::scalbn;
+  using ::scalbnf;
+  using ::scalbnl;
+
+  using ::tgamma;
+  using ::tgammaf;
+  using ::tgammal;
 
   using ::trunc;
-  inline float truncf(float __x) { return ::trunc(__x); }
+  using ::truncf;
+  using ::truncl;
 
   /// Additional overloads.
 #ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_FP
@@ -1764,6 +1884,41 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       return std::__hypot3<__type>(__x, __y, __z);
     }
 #endif // C++17
+
+#if __cplusplus > 201703L
+  // linear interpolation
+# define __cpp_lib_interpolate 201902L
+
+  template<typename _Fp>
+    constexpr _Fp
+    __lerp(_Fp __a, _Fp __b, _Fp __t) noexcept
+    {
+      if (__a <= 0 && __b >= 0 || __a >= 0 && __b <= 0)
+	return __t * __b + (1 - __t) * __a;
+
+      if (__t == 1)
+	return __b;                        // exact
+
+      // Exact at __t=0, monotonic except near __t=1,
+      // bounded, determinate, and consistent:
+      const _Fp __x = __a + __t * (__b - __a);
+      return __t > 1 == __b > __a
+	? (__b < __x ? __x : __b)
+	: (__b > __x ? __x : __b);  // monotonic near __t=1
+    }
+
+  constexpr float
+  lerp(float __a, float __b, float __t) noexcept
+  { return std::__lerp(__a, __b, __t); }
+
+  constexpr double
+  lerp(double __a, double __b, double __t) noexcept
+  { return std::__lerp(__a, __b, __t); }
+
+  constexpr long double
+  lerp(long double __a, long double __b, long double __t) noexcept
+  { return std::__lerp(__a, __b, __t); }
+#endif // C++20
 
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace

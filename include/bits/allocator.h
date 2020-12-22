@@ -1,6 +1,6 @@
 // Allocators -*- C++ -*-
 
-// Copyright (C) 2001-2018 Free Software Foundation, Inc.
+// Copyright (C) 2001-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -50,9 +50,6 @@
 #endif
 
 #define __cpp_lib_incomplete_container_elements 201505
-#if __cplusplus >= 201103L
-# define __cpp_lib_allocator_is_always_equal 201411
-#endif
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {
@@ -68,17 +65,25 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     class allocator<void>
     {
     public:
+      typedef void        value_type;
       typedef size_t      size_type;
       typedef ptrdiff_t   difference_type;
+#if __cplusplus <= 201703L
       typedef void*       pointer;
       typedef const void* const_pointer;
-      typedef void        value_type;
 
       template<typename _Tp1>
 	struct rebind
 	{ typedef allocator<_Tp1> other; };
+#else
+      allocator() = default;
 
-#if __cplusplus >= 201103L
+      template<typename _Up>
+	constexpr
+	allocator(const allocator<_Up>&) { }
+#endif // ! C++20
+
+#if __cplusplus >= 201103L && __cplusplus <= 201703L
       // _GLIBCXX_RESOLVE_LIB_DEFECTS
       // 2103. std::allocator propagate_on_container_move_assignment
       typedef true_type propagate_on_container_move_assignment;
@@ -88,12 +93,15 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       template<typename _Up, typename... _Args>
 	void
 	construct(_Up* __p, _Args&&... __args)
+	noexcept(std::is_nothrow_constructible<_Up, _Args...>::value)
 	{ ::new((void *)__p) _Up(std::forward<_Args>(__args)...); }
 
       template<typename _Up>
 	void
-	destroy(_Up* __p) { __p->~_Up(); }
-#endif
+	destroy(_Up* __p)
+	noexcept(std::is_nothrow_destructible<_Up>::value)
+	{ __p->~_Up(); }
+#endif // C++11 to C++17
     };
 
   /**
@@ -107,18 +115,20 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   template<typename _Tp>
     class allocator : public __allocator_base<_Tp>
     {
-   public:
+    public:
+      typedef _Tp        value_type;
       typedef size_t     size_type;
       typedef ptrdiff_t  difference_type;
+#if __cplusplus <= 201703L
       typedef _Tp*       pointer;
       typedef const _Tp* const_pointer;
       typedef _Tp&       reference;
       typedef const _Tp& const_reference;
-      typedef _Tp        value_type;
 
       template<typename _Tp1>
 	struct rebind
 	{ typedef allocator<_Tp1> other; };
+#endif
 
 #if __cplusplus >= 201103L
       // _GLIBCXX_RESOLVE_LIB_DEFECTS
@@ -128,42 +138,82 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       typedef true_type is_always_equal;
 #endif
 
-      allocator() throw() { }
+      // _GLIBCXX_RESOLVE_LIB_DEFECTS
+      // 3035. std::allocator's constructors should be constexpr
+      _GLIBCXX20_CONSTEXPR
+      allocator() _GLIBCXX_NOTHROW { }
 
-      allocator(const allocator& __a) throw()
+      _GLIBCXX20_CONSTEXPR
+      allocator(const allocator& __a) _GLIBCXX_NOTHROW
       : __allocator_base<_Tp>(__a) { }
 
-      template<typename _Tp1>
-	allocator(const allocator<_Tp1>&) throw() { }
+#if __cplusplus >= 201103L
+      // Avoid implicit deprecation.
+      allocator& operator=(const allocator&) = default;
+#endif
 
-      ~allocator() throw() { }
+      template<typename _Tp1>
+	_GLIBCXX20_CONSTEXPR
+	allocator(const allocator<_Tp1>&) _GLIBCXX_NOTHROW { }
+
+#if __cpp_constexpr_dynamic_alloc
+      constexpr
+#endif
+      ~allocator() _GLIBCXX_NOTHROW { }
+
+#if __cplusplus > 201703L
+      [[nodiscard,__gnu__::__always_inline__]]
+      constexpr _Tp*
+      allocate(size_t __n)
+      {
+#ifdef __cpp_lib_is_constant_evaluated
+	if (std::is_constant_evaluated())
+	  return static_cast<_Tp*>(::operator new(__n * sizeof(_Tp)));
+#endif
+	return __allocator_base<_Tp>::allocate(__n, 0);
+      }
+
+      [[__gnu__::__always_inline__]]
+      constexpr void
+      deallocate(_Tp* __p, size_t __n)
+      {
+#ifdef __cpp_lib_is_constant_evaluated
+	if (std::is_constant_evaluated())
+	  {
+	    ::operator delete(__p);
+	    return;
+	  }
+#endif
+	  __allocator_base<_Tp>::deallocate(__p, __n);
+      }
+#endif // C++20
+
+      friend _GLIBCXX20_CONSTEXPR bool
+      operator==(const allocator&, const allocator&) _GLIBCXX_NOTHROW
+      { return true; }
+
+#if __cpp_impl_three_way_comparison < 201907L
+      friend _GLIBCXX20_CONSTEXPR bool
+      operator!=(const allocator&, const allocator&) _GLIBCXX_NOTHROW
+      { return false; }
+#endif
 
       // Inherit everything else.
     };
 
   template<typename _T1, typename _T2>
-    inline bool
+    inline _GLIBCXX20_CONSTEXPR bool
     operator==(const allocator<_T1>&, const allocator<_T2>&)
-    _GLIBCXX_USE_NOEXCEPT
+    _GLIBCXX_NOTHROW
     { return true; }
 
-  template<typename _Tp>
-    inline bool
-    operator==(const allocator<_Tp>&, const allocator<_Tp>&)
-    _GLIBCXX_USE_NOEXCEPT
-    { return true; }
-
+#if __cpp_impl_three_way_comparison < 201907L
   template<typename _T1, typename _T2>
-    inline bool
+    inline _GLIBCXX20_CONSTEXPR bool
     operator!=(const allocator<_T1>&, const allocator<_T2>&)
-    _GLIBCXX_USE_NOEXCEPT
+    _GLIBCXX_NOTHROW
     { return false; }
-
-  template<typename _Tp>
-    inline bool
-    operator!=(const allocator<_Tp>&, const allocator<_Tp>&)
-    _GLIBCXX_USE_NOEXCEPT
-    { return false; }
+#endif
 
   // Invalid allocator<cv T> partial specializations.
   // allocator_traits::rebind_alloc can be used to form a valid allocator type.
@@ -195,7 +245,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   // Inhibit implicit instantiations for required instantiations,
   // which are defined via explicit instantiations elsewhere.
-#ifdef _GLIBCXX_EXTERN_TEMPLATE
+#if _GLIBCXX_EXTERN_TEMPLATE
   extern template class allocator<char>;
   extern template class allocator<wchar_t>;
 #endif

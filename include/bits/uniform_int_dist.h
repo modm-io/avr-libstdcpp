@@ -1,6 +1,6 @@
 // Class template uniform_int_distribution -*- C++ -*-
 
-// Copyright (C) 2009-2018 Free Software Foundation, Inc.
+// Copyright (C) 2009-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -33,10 +33,26 @@
 
 #include <type_traits>
 #include <limits>
+#if __cplusplus > 201703L
+# include <concepts>
+#endif
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION
+
+#ifdef __cpp_lib_concepts
+  /// Requirements for a uniform random bit generator.
+  template<typename _Gen>
+    concept uniform_random_bit_generator
+      = invocable<_Gen&> && unsigned_integral<invoke_result_t<_Gen&>>
+      && requires
+      {
+	{ _Gen::min() } -> same_as<invoke_result_t<_Gen&>>;
+	{ _Gen::max() } -> same_as<invoke_result_t<_Gen&>>;
+	requires bool_constant<(_Gen::min() < _Gen::max())>::value;
+      };
+#endif
 
   namespace __detail
   {
@@ -68,9 +84,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       {
 	typedef uniform_int_distribution<_IntType> distribution_type;
 
+	param_type() : param_type(0) { }
+
 	explicit
-	param_type(_IntType __a = 0,
-		   _IntType __b = std::numeric_limits<_IntType>::max())
+	param_type(_IntType __a,
+		   _IntType __b = numeric_limits<_IntType>::max())
 	: _M_a(__a), _M_b(__b)
 	{
 	  __glibcxx_assert(_M_a <= _M_b);
@@ -101,9 +119,14 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       /**
        * @brief Constructs a uniform distribution object.
        */
+      uniform_int_distribution() : uniform_int_distribution(0) { }
+
+      /**
+       * @brief Constructs a uniform distribution object.
+       */
       explicit
-      uniform_int_distribution(_IntType __a = 0,
-			   _IntType __b = std::numeric_limits<_IntType>::max())
+      uniform_int_distribution(_IntType __a,
+			       _IntType __b = numeric_limits<_IntType>::max())
       : _M_param(__a, __b)
       { }
 

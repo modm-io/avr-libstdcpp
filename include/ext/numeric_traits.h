@@ -1,6 +1,6 @@
 // -*- C++ -*-
 
-// Copyright (C) 2007-2018 Free Software Foundation, Inc.
+// Copyright (C) 2007-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the terms
@@ -39,13 +39,13 @@ namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)
 _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   // Compile time constants for builtin types.
-  // Sadly std::numeric_limits member functions cannot be used for this.
+  // In C++98 std::numeric_limits member functions cannot be used for this.
 #define __glibcxx_signed(_Tp) ((_Tp)(-1) < 0)
 #define __glibcxx_digits(_Tp) \
   (sizeof(_Tp) * __CHAR_BIT__ - __glibcxx_signed(_Tp))
 
 #define __glibcxx_min(_Tp) \
-  (__glibcxx_signed(_Tp) ? (_Tp)1 << __glibcxx_digits(_Tp) : (_Tp)0)
+  (__glibcxx_signed(_Tp) ? -__glibcxx_max(_Tp) - 1 : (_Tp)0)
 
 #define __glibcxx_max(_Tp) \
   (__glibcxx_signed(_Tp) ? \
@@ -54,6 +54,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   template<typename _Value>
     struct __numeric_traits_integer
     {
+#if __cplusplus >= 201103L
+      static_assert(std::__is_integer<_Value>::__value,
+		    "invalid specialization");
+#endif
+
       // Only integers for initialization of member constant.
       static const _Value __min = __glibcxx_min(_Value);
       static const _Value __max = __glibcxx_max(_Value);
@@ -75,6 +80,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   template<typename _Value>
     const int __numeric_traits_integer<_Value>::__digits;
+
+#if __cplusplus >= 201103L
+  template<typename _Tp>
+    using __int_traits = __numeric_traits_integer<_Tp>;
+#endif
 
 #undef __glibcxx_signed
 #undef __glibcxx_digits

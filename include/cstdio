@@ -1,6 +1,6 @@
 // -*- C++ -*- forwarding header.
 
-// Copyright (C) 1997-2018 Free Software Foundation, Inc.
+// Copyright (C) 1997-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -176,6 +176,7 @@ namespace __gnu_cxx
   using ::vfscanf;
   using ::vscanf;
   using ::vsnprintf;
+  using ::vsscanf;
 #endif
 } // namespace __gnu_cxx
 
@@ -185,6 +186,7 @@ namespace std
   using ::__gnu_cxx::vfscanf;
   using ::__gnu_cxx::vscanf;
   using ::__gnu_cxx::vsnprintf;
+  using ::__gnu_cxx::vsscanf;
 } // namespace std
 
 #endif // _GLIBCXX_USE_C99_STDIO

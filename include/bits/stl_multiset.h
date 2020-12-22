@@ -1,6 +1,6 @@
 // Multiset implementation -*- C++ -*-
 
-// Copyright (C) 2001-2018 Free Software Foundation, Inc.
+// Copyright (C) 2001-2020 Free Software Foundation, Inc.
 //
 // This file is part of the GNU ISO C++ Library.  This library is free
 // software; you can redistribute it and/or modify it under the
@@ -109,7 +109,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 #if __cplusplus >= 201103L
       static_assert(is_same<typename remove_cv<_Key>::type, _Key>::value,
 	  "std::multiset must have a non-const, non-volatile value_type");
-# ifdef __STRICT_ANSI__
+# if __cplusplus > 201703L || defined __STRICT_ANSI__
       static_assert(is_same<typename _Alloc::value_type, _Key>::value,
 	  "std::multiset must have the same value_type as its allocator");
 # endif
@@ -186,7 +186,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       template<typename _InputIterator>
 	multiset(_InputIterator __first, _InputIterator __last)
 	: _M_t()
-	{ _M_t._M_insert_equal(__first, __last); }
+	{ _M_t._M_insert_range_equal(__first, __last); }
 
       /**
        *  @brief  Builds a %multiset from a range.
@@ -204,7 +204,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 		 const _Compare& __comp,
 		 const allocator_type& __a = allocator_type())
 	: _M_t(__comp, _Key_alloc_type(__a))
-	{ _M_t._M_insert_equal(__first, __last); }
+	{ _M_t._M_insert_range_equal(__first, __last); }
 
       /**
        *  @brief  %Multiset copy constructor.
@@ -240,12 +240,12 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 	       const _Compare& __comp = _Compare(),
 	       const allocator_type& __a = allocator_type())
       : _M_t(__comp, _Key_alloc_type(__a))
-      { _M_t._M_insert_equal(__l.begin(), __l.end()); }
+      { _M_t._M_insert_range_equal(__l.begin(), __l.end()); }
 
       /// Allocator-extended default constructor.
       explicit
       multiset(const allocator_type& __a)
-      : _M_t(_Compare(), _Key_alloc_type(__a)) { }
+      : _M_t(_Key_alloc_type(__a)) { }
 
       /// Allocator-extended copy constructor.
       multiset(const multiset& __m, const allocator_type& __a)
@@ -259,15 +259,15 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 
       /// Allocator-extended initialier-list constructor.
       multiset(initializer_list<value_type> __l, const allocator_type& __a)
-      : _M_t(_Compare(), _Key_alloc_type(__a))
-      { _M_t._M_insert_equal(__l.begin(), __l.end()); }
+      : _M_t(_Key_alloc_type(__a))
+      { _M_t._M_insert_range_equal(__l.begin(), __l.end()); }
 
       /// Allocator-extended range constructor.
       template<typename _InputIterator>
 	multiset(_InputIterator __first, _InputIterator __last,
 		 const allocator_type& __a)
-	: _M_t(_Compare(), _Key_alloc_type(__a))
-	{ _M_t._M_insert_equal(__first, __last); }
+	: _M_t(_Key_alloc_type(__a))
+	{ _M_t._M_insert_range_equal(__first, __last); }
 
       /**
        *  The dtor only erases the elements, and note that if the elements
@@ -406,7 +406,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 #endif
 
       ///  Returns true if the %set is empty.
-      bool
+      _GLIBCXX_NODISCARD bool
       empty() const _GLIBCXX_NOEXCEPT
       { return _M_t.empty(); }
 
@@ -549,7 +549,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
       template<typename _InputIterator>
 	void
 	insert(_InputIterator __first, _InputIterator __last)
-	{ _M_t._M_insert_equal(__first, __last); }
+	{ _M_t._M_insert_range_equal(__first, __last); }
 
 #if __cplusplus >= 201103L
       /**
@@ -738,6 +738,25 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 #endif
       //@}
 
+#if __cplusplus > 201703L
+      //@{
+      /**
+       *  @brief  Finds whether an element with the given key exists.
+       *  @param  __x  Key of elements to be located.
+       *  @return  True if there is any element with the specified key.
+       */
+      bool
+      contains(const key_type& __x) const
+      { return _M_t.find(__x) != _M_t.end(); }
+
+      template<typename _Kt>
+	auto
+	contains(const _Kt& __x) const
+	-> decltype(_M_t._M_find_tr(__x), void(), true)
+	{ return _M_t._M_find_tr(__x) != _M_t.end(); }
+      //@}
+#endif
+
       // _GLIBCXX_RESOLVE_LIB_DEFECTS
       // 214.  set::find() missing const overload
       //@{
@@ -884,10 +903,17 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 	operator==(const multiset<_K1, _C1, _A1>&,
 		   const multiset<_K1, _C1, _A1>&);
 
+#if __cpp_lib_three_way_comparison
+      template<typename _K1, typename _C1, typename _A1>
+	friend __detail::__synth3way_t<_K1>
+	operator<=>(const multiset<_K1, _C1, _A1>&,
+		    const multiset<_K1, _C1, _A1>&);
+#else
       template<typename _K1, typename _C1, typename _A1>
 	friend bool
 	operator< (const multiset<_K1, _C1, _A1>&,
 		   const multiset<_K1, _C1, _A1>&);
+#endif
     };
 
 #if __cpp_deduction_guides >= 201606
@@ -898,34 +924,36 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 	   typename _Allocator =
 	     allocator<typename iterator_traits<_InputIterator>::value_type>,
 	   typename = _RequireInputIter<_InputIterator>,
+	   typename = _RequireNotAllocator<_Compare>,
 	   typename = _RequireAllocator<_Allocator>>
-   multiset(_InputIterator, _InputIterator,
-	    _Compare = _Compare(), _Allocator = _Allocator())
-   -> multiset<typename iterator_traits<_InputIterator>::value_type,
-	       _Compare, _Allocator>;
+    multiset(_InputIterator, _InputIterator,
+	     _Compare = _Compare(), _Allocator = _Allocator())
+    -> multiset<typename iterator_traits<_InputIterator>::value_type,
+		_Compare, _Allocator>;
 
- template<typename _Key,
-	  typename _Compare = less<_Key>,
-	  typename _Allocator = allocator<_Key>,
-	  typename = _RequireAllocator<_Allocator>>
-   multiset(initializer_list<_Key>,
-	    _Compare = _Compare(), _Allocator = _Allocator())
-   -> multiset<_Key, _Compare, _Allocator>;
+  template<typename _Key,
+	   typename _Compare = less<_Key>,
+	   typename _Allocator = allocator<_Key>,
+	   typename = _RequireNotAllocator<_Compare>,
+	   typename = _RequireAllocator<_Allocator>>
+    multiset(initializer_list<_Key>,
+	     _Compare = _Compare(), _Allocator = _Allocator())
+    -> multiset<_Key, _Compare, _Allocator>;
 
- template<typename _InputIterator, typename _Allocator,
-	  typename = _RequireInputIter<_InputIterator>,
-	  typename = _RequireAllocator<_Allocator>>
-   multiset(_InputIterator, _InputIterator, _Allocator)
-   -> multiset<typename iterator_traits<_InputIterator>::value_type,
-	       less<typename iterator_traits<_InputIterator>::value_type>,
-	       _Allocator>;
+  template<typename _InputIterator, typename _Allocator,
+	   typename = _RequireInputIter<_InputIterator>,
+	   typename = _RequireAllocator<_Allocator>>
+    multiset(_InputIterator, _InputIterator, _Allocator)
+    -> multiset<typename iterator_traits<_InputIterator>::value_type,
+	        less<typename iterator_traits<_InputIterator>::value_type>,
+	        _Allocator>;
 
- template<typename _Key, typename _Allocator,
-	  typename = _RequireAllocator<_Allocator>>
-   multiset(initializer_list<_Key>, _Allocator)
-   -> multiset<_Key, less<_Key>, _Allocator>;
+  template<typename _Key, typename _Allocator,
+	   typename = _RequireAllocator<_Allocator>>
+    multiset(initializer_list<_Key>, _Allocator)
+    -> multiset<_Key, less<_Key>, _Allocator>;
 
-#endif
+#endif // deduction guides
 
   /**
    *  @brief  Multiset equality comparison.
@@ -944,6 +972,27 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
 	       const multiset<_Key, _Compare, _Alloc>& __y)
     { return __x._M_t == __y._M_t; }
 
+#if __cpp_lib_three_way_comparison
+  /**
+   *  @brief  Multiset ordering relation.
+   *  @param  __x  A `multiset`.
+   *  @param  __y  A `multiset` of the same type as `x`.
+   *  @return  A value indicating whether `__x` is less than, equal to,
+   *           greater than, or incomparable with `__y`.
+   *
+   *  This is a total ordering relation.  It is linear in the size of the
+   *  maps.  The elements must be comparable with @c <.
+   *
+   *  See `std::lexicographical_compare_three_way()` for how the determination
+   *  is made. This operator is used to synthesize relational operators like
+   *  `<` and `>=` etc.
+  */
+  template<typename _Key, typename _Compare, typename _Alloc>
+    inline __detail::__synth3way_t<_Key>
+    operator<=>(const multiset<_Key, _Compare, _Alloc>& __x,
+		const multiset<_Key, _Compare, _Alloc>& __y)
+    { return __x._M_t <=> __y._M_t; }
+#else
   /**
    *  @brief  Multiset ordering relation.
    *  @param  __x  A %multiset.
@@ -988,6 +1037,7 @@ _GLIBCXX_BEGIN_NAMESPACE_CONTAINER
     operator>=(const multiset<_Key, _Compare, _Alloc>& __x,
 	       const multiset<_Key, _Compare, _Alloc>& __y)
     { return !(__x < __y); }
+#endif // three-way comparison
 
   /// See std::multiset::swap().
   template<typename _Key, typename _Compare, typename _Alloc>
@@ -1017,7 +1067,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
       _S_get_tree(_GLIBCXX_STD_C::multiset<_Val, _Cmp2, _Alloc>& __set)
       { return __set._M_t; }
     };
-
 #endif // C++17
 
 _GLIBCXX_END_NAMESPACE_VERSION
