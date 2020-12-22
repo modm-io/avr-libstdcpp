@@ -368,41 +368,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		 const linear_congruential_engine& __rhs)
       { return __lhs._M_x == __rhs._M_x; }
 
-      /**
-       * @brief Writes the textual representation of the state x(i) of x to
-       *        @p __os.
-       *
-       * @param __os  The output stream.
-       * @param __lcr A % linear_congruential_engine random number generator.
-       * @returns __os.
-       */
-      template<typename _UIntType1, _UIntType1 __a1, _UIntType1 __c1,
-	       _UIntType1 __m1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::linear_congruential_engine<_UIntType1,
-		   __a1, __c1, __m1>& __lcr);
-
-      /**
-       * @brief Sets the state of the engine by reading its textual
-       *        representation from @p __is.
-       *
-       * The textual representation must have been previously written using
-       * an output stream whose imbued locale and whose type's template
-       * specialization arguments _CharT and _Traits were the same as those
-       * of @p __is.
-       *
-       * @param __is  The input stream.
-       * @param __lcr A % linear_congruential_engine random number generator.
-       * @returns __is.
-       */
-      template<typename _UIntType1, _UIntType1 __a1, _UIntType1 __c1,
-	       _UIntType1 __m1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::linear_congruential_engine<_UIntType1, __a1,
-		   __c1, __m1>& __lcr);
-
     private:
       _UIntType _M_x;
     };
@@ -580,58 +545,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       { return (std::equal(__lhs._M_x, __lhs._M_x + state_size, __rhs._M_x)
 		&& __lhs._M_p == __rhs._M_p); }
 
-      /**
-       * @brief Inserts the current state of a % mersenne_twister_engine
-       *        random number generator engine @p __x into the output stream
-       *        @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A % mersenne_twister_engine random number generator
-       *             engine.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _UIntType1,
-	       size_t __w1, size_t __n1,
-	       size_t __m1, size_t __r1,
-	       _UIntType1 __a1, size_t __u1,
-	       _UIntType1 __d1, size_t __s1,
-	       _UIntType1 __b1, size_t __t1,
-	       _UIntType1 __c1, size_t __l1, _UIntType1 __f1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::mersenne_twister_engine<_UIntType1, __w1, __n1,
-		   __m1, __r1, __a1, __u1, __d1, __s1, __b1, __t1, __c1,
-		   __l1, __f1>& __x);
-
-      /**
-       * @brief Extracts the current state of a % mersenne_twister_engine
-       *        random number generator engine @p __x from the input stream
-       *        @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A % mersenne_twister_engine random number generator
-       *             engine.
-       *
-       * @returns The input stream with the state of @p __x extracted or in
-       * an error state.
-       */
-      template<typename _UIntType1,
-	       size_t __w1, size_t __n1,
-	       size_t __m1, size_t __r1,
-	       _UIntType1 __a1, size_t __u1,
-	       _UIntType1 __d1, size_t __s1,
-	       _UIntType1 __b1, size_t __t1,
-	       _UIntType1 __c1, size_t __l1, _UIntType1 __f1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::mersenne_twister_engine<_UIntType1, __w1, __n1, __m1,
-		   __r1, __a1, __u1, __d1, __s1, __b1, __t1, __c1,
-		   __l1, __f1>& __x);
-
     private:
       void _M_gen_rand();
 
@@ -798,44 +711,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       { return (std::equal(__lhs._M_x, __lhs._M_x + long_lag, __rhs._M_x)
 		&& __lhs._M_carry == __rhs._M_carry
 		&& __lhs._M_p == __rhs._M_p); }
-
-      /**
-       * @brief Inserts the current state of a % subtract_with_carry_engine
-       *        random number generator engine @p __x into the output stream
-       *        @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A % subtract_with_carry_engine random number generator
-       *             engine.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _UIntType1, size_t __w1, size_t __s1, size_t __r1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::subtract_with_carry_engine<_UIntType1, __w1,
-		   __s1, __r1>& __x);
-
-      /**
-       * @brief Extracts the current state of a % subtract_with_carry_engine
-       *        random number generator engine @p __x from the input stream
-       *        @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A % subtract_with_carry_engine random number generator
-       *             engine.
-       *
-       * @returns The input stream with the state of @p __x extracted or in
-       * an error state.
-       */
-      template<typename _UIntType1, size_t __w1, size_t __s1, size_t __r1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::subtract_with_carry_engine<_UIntType1, __w1,
-		   __s1, __r1>& __x);
 
     private:
       /// The state of the generator.  This is a ring buffer.
@@ -1027,42 +902,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		 const discard_block_engine& __rhs)
       { return __lhs._M_b == __rhs._M_b && __lhs._M_n == __rhs._M_n; }
 
-      /**
-       * @brief Inserts the current state of a %discard_block_engine random
-       *        number generator engine @p __x into the output stream
-       *        @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %discard_block_engine random number generator engine.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RandomNumberEngine1, size_t __p1, size_t __r1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::discard_block_engine<_RandomNumberEngine1,
-		   __p1, __r1>& __x);
-
-      /**
-       * @brief Extracts the current state of a % subtract_with_carry_engine
-       *        random number generator engine @p __x from the input stream
-       *        @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %discard_block_engine random number generator engine.
-       *
-       * @returns The input stream with the state of @p __x extracted or in
-       * an error state.
-       */
-      template<typename _RandomNumberEngine1, size_t __p1, size_t __r1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::discard_block_engine<_RandomNumberEngine1,
-		   __p1, __r1>& __x);
-
     private:
       _RandomNumberEngine _M_b;
       size_t _M_n;
@@ -1238,28 +1077,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		 const independent_bits_engine& __rhs)
       { return __lhs._M_b == __rhs._M_b; }
 
-      /**
-       * @brief Extracts the current state of a % subtract_with_carry_engine
-       *        random number generator engine @p __x from the input stream
-       *        @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %independent_bits_engine random number generator
-       *             engine.
-       *
-       * @returns The input stream with the state of @p __x extracted or in
-       *          an error state.
-       */
-      template<typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::independent_bits_engine<_RandomNumberEngine,
-		   __w, _UIntType>& __x)
-	{
-	  __is >> __x._M_b;
-	  return __is;
-	}
-
     private:
       _RandomNumberEngine _M_b;
     };
@@ -1284,26 +1101,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       _UIntType>& __rhs)
     { return !(__lhs == __rhs); }
 
-  /**
-   * @brief Inserts the current state of a %independent_bits_engine random
-   *        number generator engine @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %independent_bits_engine random number generator engine.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   *          an error state.
-   */
-  template<typename _RandomNumberEngine, size_t __w, typename _UIntType,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::independent_bits_engine<_RandomNumberEngine,
-	       __w, _UIntType>& __x)
-    {
-      __os << __x.base();
-      return __os;
-    }
 
 
   /**
@@ -1470,40 +1267,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		&& std::equal(__lhs._M_v, __lhs._M_v + __k, __rhs._M_v)
 		&& __lhs._M_y == __rhs._M_y); }
 
-      /**
-       * @brief Inserts the current state of a %shuffle_order_engine random
-       *        number generator engine @p __x into the output stream
-	@p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %shuffle_order_engine random number generator engine.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RandomNumberEngine1, size_t __k1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::shuffle_order_engine<_RandomNumberEngine1,
-		   __k1>& __x);
-
-      /**
-       * @brief Extracts the current state of a % subtract_with_carry_engine
-       *        random number generator engine @p __x from the input stream
-       *        @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %shuffle_order_engine random number generator engine.
-       *
-       * @returns The input stream with the state of @p __x extracted or in
-       * an error state.
-       */
-      template<typename _RandomNumberEngine1, size_t __k1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::shuffle_order_engine<_RandomNumberEngine1, __k1>& __x);
 
     private:
       void _M_initialize()
@@ -1689,35 +1452,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     operator!=(const std::uniform_int_distribution<_IntType>& __d1,
 	       const std::uniform_int_distribution<_IntType>& __d2)
     { return !(__d1 == __d2); }
-
-  /**
-   * @brief Inserts a %uniform_int_distribution random number
-   *        distribution @p __x into the output stream @p os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %uniform_int_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>&,
-	       const std::uniform_int_distribution<_IntType>&);
-
-  /**
-   * @brief Extracts a %uniform_int_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x  A %uniform_int_distribution random number generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>&,
-	       std::uniform_int_distribution<_IntType>&);
 
 
   /**
@@ -1911,35 +1645,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       const std::uniform_real_distribution<_IntType>& __d2)
     { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %uniform_real_distribution random number
-   *        distribution @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %uniform_real_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   *          an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>&,
-	       const std::uniform_real_distribution<_RealType>&);
-
-  /**
-   * @brief Extracts a %uniform_real_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x  A %uniform_real_distribution random number generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>&,
-	       std::uniform_real_distribution<_RealType>&);
-
   /* @} */ // group random_distributions_uniform
 
   /**
@@ -2115,36 +1820,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	friend bool
         operator==(const std::normal_distribution<_RealType1>& __d1,
 		   const std::normal_distribution<_RealType1>& __d2);
-
-      /**
-       * @brief Inserts a %normal_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %normal_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::normal_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %normal_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %normal_distribution random number generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::normal_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -2327,35 +2002,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       { return (__d1._M_param == __d2._M_param
 		&& __d1._M_nd == __d2._M_nd); }
 
-      /**
-       * @brief Inserts a %lognormal_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %lognormal_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::lognormal_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %lognormal_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %lognormal_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::lognormal_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -2559,35 +2205,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       { return (__d1._M_param == __d2._M_param
 		&& __d1._M_nd == __d2._M_nd); }
 
-      /**
-       * @brief Inserts a %gamma_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %gamma_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::gamma_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %gamma_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %gamma_distribution random number generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::gamma_distribution<_RealType1>& __x);
-
     private:
       template<typename _ForwardIterator,
 	       typename _UniformRandomNumberGenerator>
@@ -2774,36 +2391,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       operator==(const chi_squared_distribution& __d1,
 		 const chi_squared_distribution& __d2)
       { return __d1._M_param == __d2._M_param && __d1._M_gd == __d2._M_gd; }
-
-      /**
-       * @brief Inserts a %chi_squared_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %chi_squared_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::chi_squared_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %chi_squared_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %chi_squared_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::chi_squared_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -3008,35 +2595,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       const std::cauchy_distribution<_RealType>& __d2)
     { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %cauchy_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %cauchy_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::cauchy_distribution<_RealType>& __x);
-
-  /**
-   * @brief Extracts a %cauchy_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x A %cauchy_distribution random number
-   *            generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::cauchy_distribution<_RealType>& __x);
 
 
   /**
@@ -3213,36 +2771,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       { return (__d1._M_param == __d2._M_param
 		&& __d1._M_gd_x == __d2._M_gd_x
 		&& __d1._M_gd_y == __d2._M_gd_y); }
-
-      /**
-       * @brief Inserts a %fisher_f_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %fisher_f_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::fisher_f_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %fisher_f_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %fisher_f_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::fisher_f_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -3435,36 +2963,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		 const student_t_distribution& __d2)
       { return (__d1._M_param == __d2._M_param
 		&& __d1._M_nd == __d2._M_nd && __d1._M_gd == __d2._M_gd); }
-
-      /**
-       * @brief Inserts a %student_t_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %student_t_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::student_t_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %student_t_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %student_t_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::student_t_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -3682,41 +3180,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	     const std::bernoulli_distribution& __d2)
   { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %bernoulli_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %bernoulli_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::bernoulli_distribution& __x);
-
-  /**
-   * @brief Extracts a %bernoulli_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x  A %bernoulli_distribution random number generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _CharT, typename _Traits>
-    inline std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::bernoulli_distribution& __x)
-    {
-      double __p;
-      if (__is >> __p)
-	__x.param(bernoulli_distribution::param_type(__p));
-      return __is;
-    }
-
 
   /**
    * @brief A discrete binomial random number distribution.
@@ -3896,38 +3359,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #else
         { return __d1._M_param == __d2._M_param; }
 #endif
-
-      /**
-       * @brief Inserts a %binomial_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %binomial_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _IntType1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::binomial_distribution<_IntType1>& __x);
-
-      /**
-       * @brief Extracts a %binomial_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %binomial_distribution random number generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _IntType1,
-	       typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::binomial_distribution<_IntType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -4136,37 +3567,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       const std::geometric_distribution<_IntType>& __d2)
     { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %geometric_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %geometric_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::geometric_distribution<_IntType>& __x);
-
-  /**
-   * @brief Extracts a %geometric_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x  A %geometric_distribution random number generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::geometric_distribution<_IntType>& __x);
-
 
   /**
    * @brief A negative_binomial_distribution random number distribution.
@@ -4331,37 +3731,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       operator==(const negative_binomial_distribution& __d1,
 		 const negative_binomial_distribution& __d2)
       { return __d1._M_param == __d2._M_param && __d1._M_gd == __d2._M_gd; }
-
-      /**
-       * @brief Inserts a %negative_binomial_distribution random
-       *        number distribution @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %negative_binomial_distribution random number
-       *             distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       *          an error state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::negative_binomial_distribution<_IntType1>& __x);
-
-      /**
-       * @brief Extracts a %negative_binomial_distribution random number
-       *        distribution @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %negative_binomial_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::negative_binomial_distribution<_IntType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -4562,36 +3931,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #else
       { return __d1._M_param == __d2._M_param; }
 #endif
-
-      /**
-       * @brief Inserts a %poisson_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %poisson_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::poisson_distribution<_IntType1>& __x);
-
-      /**
-       * @brief Extracts a %poisson_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %poisson_distribution random number generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::poisson_distribution<_IntType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -4807,36 +4146,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       const std::exponential_distribution<_RealType>& __d2)
     { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %exponential_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %exponential_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::exponential_distribution<_RealType>& __x);
-
-  /**
-   * @brief Extracts a %exponential_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x A %exponential_distribution random number
-   *            generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::exponential_distribution<_RealType>& __x);
-
 
   /**
    * @brief A weibull_distribution random number distribution.
@@ -5017,36 +4326,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	       const std::weibull_distribution<_RealType>& __d2)
     { return !(__d1 == __d2); }
 
-  /**
-   * @brief Inserts a %weibull_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %weibull_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::weibull_distribution<_RealType>& __x);
-
-  /**
-   * @brief Extracts a %weibull_distribution random number distribution
-   * @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x A %weibull_distribution random number
-   *            generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::weibull_distribution<_RealType>& __x);
-
 
   /**
    * @brief A extreme_value_distribution random number distribution.
@@ -5226,36 +4505,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     operator!=(const std::extreme_value_distribution<_RealType>& __d1,
 	       const std::extreme_value_distribution<_RealType>& __d2)
     { return !(__d1 == __d2); }
-
-  /**
-   * @brief Inserts a %extreme_value_distribution random number distribution
-   * @p __x into the output stream @p __os.
-   *
-   * @param __os An output stream.
-   * @param __x  A %extreme_value_distribution random number distribution.
-   *
-   * @returns The output stream with the state of @p __x inserted or in
-   * an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const std::extreme_value_distribution<_RealType>& __x);
-
-  /**
-   * @brief Extracts a %extreme_value_distribution random number
-   *        distribution @p __x from the input stream @p __is.
-   *
-   * @param __is An input stream.
-   * @param __x A %extreme_value_distribution random number
-   *            generator engine.
-   *
-   * @returns The input stream with @p __x extracted or in an error state.
-   */
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       std::extreme_value_distribution<_RealType>& __x);
 
 
   /**
@@ -5440,36 +4689,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		 const discrete_distribution& __d2)
       { return __d1._M_param == __d2._M_param; }
 
-      /**
-       * @brief Inserts a %discrete_distribution random number distribution
-       * @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %discrete_distribution random number distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::discrete_distribution<_IntType1>& __x);
-
-      /**
-       * @brief Extracts a %discrete_distribution random number distribution
-       * @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %discrete_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _IntType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::discrete_distribution<_IntType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -5709,38 +4928,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       operator==(const piecewise_constant_distribution& __d1,
 		 const piecewise_constant_distribution& __d2)
       { return __d1._M_param == __d2._M_param; }
-
-      /**
-       * @brief Inserts a %piecewise_constant_distribution random
-       *        number distribution @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %piecewise_constant_distribution random number
-       *             distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       * an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::piecewise_constant_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %piecewise_constant_distribution random
-       *        number distribution @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x A %piecewise_constant_distribution random number
-       *            generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::piecewise_constant_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,
@@ -5982,38 +5169,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       operator==(const piecewise_linear_distribution& __d1,
 		 const piecewise_linear_distribution& __d2)
       { return __d1._M_param == __d2._M_param; }
-
-      /**
-       * @brief Inserts a %piecewise_linear_distribution random number
-       *        distribution @p __x into the output stream @p __os.
-       *
-       * @param __os An output stream.
-       * @param __x  A %piecewise_linear_distribution random number
-       *             distribution.
-       *
-       * @returns The output stream with the state of @p __x inserted or in
-       *          an error state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_ostream<_CharT, _Traits>&
-	operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-		   const std::piecewise_linear_distribution<_RealType1>& __x);
-
-      /**
-       * @brief Extracts a %piecewise_linear_distribution random number
-       *        distribution @p __x from the input stream @p __is.
-       *
-       * @param __is An input stream.
-       * @param __x  A %piecewise_linear_distribution random number
-       *             generator engine.
-       *
-       * @returns The input stream with @p __x extracted or in an error
-       *          state.
-       */
-      template<typename _RealType1, typename _CharT, typename _Traits>
-	friend std::basic_istream<_CharT, _Traits>&
-	operator>>(std::basic_istream<_CharT, _Traits>& __is,
-		   std::piecewise_linear_distribution<_RealType1>& __x);
 
     private:
       template<typename _ForwardIterator,

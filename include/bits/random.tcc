@@ -148,44 +148,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	seed(__sum);
       }
 
-  template<typename _UIntType, _UIntType __a, _UIntType __c, _UIntType __m,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const linear_congruential_engine<_UIntType,
-						__a, __c, __m>& __lcr)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      __os.flags(__ios_base::dec | __ios_base::fixed | __ios_base::left);
-      __os.fill(__os.widen(' '));
-
-      __os << __lcr._M_x;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _UIntType, _UIntType __a, _UIntType __c, _UIntType __m,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       linear_congruential_engine<_UIntType, __a, __c, __m>& __lcr)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec);
-
-      __is >> __lcr._M_x;
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _UIntType,
 	   size_t __w, size_t __n, size_t __m, size_t __r,
@@ -465,56 +427,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       return __z;
     }
 
-  template<typename _UIntType, size_t __w,
-	   size_t __n, size_t __m, size_t __r,
-	   _UIntType __a, size_t __u, _UIntType __d, size_t __s,
-	   _UIntType __b, size_t __t, _UIntType __c, size_t __l,
-	   _UIntType __f, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const mersenne_twister_engine<_UIntType, __w, __n, __m,
-	       __r, __a, __u, __d, __s, __b, __t, __c, __l, __f>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::dec | __ios_base::fixed | __ios_base::left);
-      __os.fill(__space);
-
-      for (size_t __i = 0; __i < __n; ++__i)
-	__os << __x._M_x[__i] << __space;
-      __os << __x._M_p;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _UIntType, size_t __w,
-	   size_t __n, size_t __m, size_t __r,
-	   _UIntType __a, size_t __u, _UIntType __d, size_t __s,
-	   _UIntType __b, size_t __t, _UIntType __c, size_t __l,
-	   _UIntType __f, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       mersenne_twister_engine<_UIntType, __w, __n, __m,
-	       __r, __a, __u, __d, __s, __b, __t, __c, __l, __f>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      for (size_t __i = 0; __i < __n; ++__i)
-	__is >> __x._M_x[__i];
-      __is >> __x._M_p;
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _UIntType, size_t __w, size_t __s, size_t __r>
     constexpr size_t
@@ -622,50 +534,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       return __xi;
     }
 
-  template<typename _UIntType, size_t __w, size_t __s, size_t __r,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const subtract_with_carry_engine<_UIntType,
-						__w, __s, __r>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::dec | __ios_base::fixed | __ios_base::left);
-      __os.fill(__space);
-
-      for (size_t __i = 0; __i < __r; ++__i)
-	__os << __x._M_x[__i] << __space;
-      __os << __x._M_carry << __space << __x._M_p;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _UIntType, size_t __w, size_t __s, size_t __r,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       subtract_with_carry_engine<_UIntType, __w, __s, __r>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      for (size_t __i = 0; __i < __r; ++__i)
-	__is >> __x._M_x[__i];
-      __is >> __x._M_carry;
-      __is >> __x._M_p;
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RandomNumberEngine, size_t __p, size_t __r>
     constexpr size_t
@@ -688,45 +556,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	}
       ++_M_n;
       return _M_b();
-    }
-
-  template<typename _RandomNumberEngine, size_t __p, size_t __r,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const discard_block_engine<_RandomNumberEngine,
-	       __p, __r>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::dec | __ios_base::fixed | __ios_base::left);
-      __os.fill(__space);
-
-      __os << __x.base() << __space << __x._M_n;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _RandomNumberEngine, size_t __p, size_t __r,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       discard_block_engine<_RandomNumberEngine, __p, __r>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      __is >> __x._M_b >> __x._M_n;
-
-      __is.flags(__flags);
-      return __is;
     }
 
 
@@ -817,91 +646,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       return _M_y;
     }
 
-  template<typename _RandomNumberEngine, size_t __k,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const shuffle_order_engine<_RandomNumberEngine, __k>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::dec | __ios_base::fixed | __ios_base::left);
-      __os.fill(__space);
-
-      __os << __x.base();
-      for (size_t __i = 0; __i < __k; ++__i)
-	__os << __space << __x._M_v[__i];
-      __os << __space << __x._M_y;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _RandomNumberEngine, size_t __k,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       shuffle_order_engine<_RandomNumberEngine, __k>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      __is >> __x._M_b;
-      for (size_t __i = 0; __i < __k; ++__i)
-	__is >> __x._M_v[__i];
-      __is >> __x._M_y;
-
-      __is.flags(__flags);
-      return __is;
-    }
-
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const uniform_int_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-
-      __os << __x.a() << __space << __x.b();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      return __os;
-    }
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       uniform_int_distribution<_IntType>& __x)
-    {
-      using param_type
-	= typename uniform_int_distribution<_IntType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _IntType __a, __b;
-      if (__is >> __a >> __b)
-	__x.param(param_type(__a, __b));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -920,49 +664,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  *__f++ = __aurng() * __range + __p.a();
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const uniform_real_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.a() << __space << __x.b();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       uniform_real_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename uniform_real_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::skipws);
-
-      _RealType __a, __b;
-      if (__is >> __a >> __b)
-	__x.param(param_type(__a, __b));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _ForwardIterator,
 	   typename _UniformRandomNumberGenerator>
@@ -979,28 +680,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
       while (__f != __t)
 	*__f++ = (__aurng() - __aurng.min()) < __limit;
-    }
-
-  template<typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const bernoulli_distribution& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__os.widen(' '));
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      __os << __x.p();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
     }
 
 
@@ -1061,48 +740,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  }
       }
 
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const geometric_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__os.widen(' '));
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      __os << __x.p();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       geometric_distribution<_IntType>& __x)
-    {
-      using param_type = typename geometric_distribution<_IntType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::skipws);
-
-      double __p;
-      if (__is >> __p)
-	__x.param(param_type(__p));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
   // This is Leger's algorithm, also in Devroye, Ch. X, Example 1.5.
   template<typename _IntType>
@@ -1175,51 +812,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	    *__f++ = __poisson(__urng);
 	  }
       }
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const negative_binomial_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__os.widen(' '));
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      __os << __x.k() << __space << __x.p()
-	   << __space << __x._M_gd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       negative_binomial_distribution<_IntType>& __x)
-    {
-      using param_type
-	= typename negative_binomial_distribution<_IntType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::skipws);
-
-      _IntType __k;
-      double __p;
-      if (__is >> __k >> __p >> __x._M_gd)
-	__x.param(param_type(__k, __p));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _IntType>
@@ -1384,50 +976,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	while (__f != __t)
 	  *__f++ = this->operator()(__urng, __param);
       }
-
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const poisson_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      __os << __x.mean() << __space << __x._M_nd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       poisson_distribution<_IntType>& __x)
-    {
-      using param_type = typename poisson_distribution<_IntType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::skipws);
-
-      double __mean;
-      if (__is >> __mean >> __x._M_nd)
-	__x.param(param_type(__mean));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _IntType>
@@ -1651,52 +1199,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  *__f++ = this->operator()(__urng, __param);
       }
 
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const binomial_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      __os << __x.t() << __space << __x.p()
-	   << __space << __x._M_nd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _IntType,
-	   typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       binomial_distribution<_IntType>& __x)
-    {
-      using param_type = typename binomial_distribution<_IntType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _IntType __t;
-      double __p;
-      if (__is >> __t >> __p >> __x._M_nd)
-	__x.param(param_type(__t, __p));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -1713,48 +1215,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	while (__f != __t)
 	  *__f++ = -std::log(result_type(1) - __aurng()) / __p.lambda();
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const exponential_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__os.widen(' '));
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.lambda();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       exponential_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename exponential_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __lambda;
-      if (__is >> __lambda)
-	__x.param(param_type(__lambda));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   /**
@@ -1880,58 +1340,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	return false;
     }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const normal_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.mean() << __space << __x.stddev()
-	   << __space << __x._M_saved_available;
-      if (__x._M_saved_available)
-	__os << __space << __x._M_saved;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       normal_distribution<_RealType>& __x)
-    {
-      using param_type = typename normal_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      double __mean, __stddev;
-      bool __saved_avail;
-      if (__is >> __mean >> __stddev >> __saved_avail)
-	{
-	  if (__saved_avail && (__is >> __x._M_saved))
-	    {
-	      __x._M_saved_available = __saved_avail;
-	      __x.param(param_type(__mean, __stddev));
-	    }
-	}
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -1946,50 +1354,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  while (__f != __t)
 	    *__f++ = std::exp(__p.s() * _M_nd(__urng) + __p.m());
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const lognormal_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.m() << __space << __x.s()
-	   << __space << __x._M_nd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       lognormal_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename lognormal_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __m, __s;
-      if (__is >> __m >> __s >> __x._M_nd)
-	__x.param(param_type(__m, __s));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -2018,49 +1382,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	while (__f != __t)
 	  *__f++ = 2 * _M_gd(__urng, __p);
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const chi_squared_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.n() << __space << __x._M_gd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       chi_squared_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename chi_squared_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __n;
-      if (__is >> __n >> __x._M_gd)
-	__x.param(param_type(__n));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _RealType>
@@ -2105,48 +1426,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  }
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const cauchy_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.a() << __space << __x.b();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       cauchy_distribution<_RealType>& __x)
-    {
-      using param_type = typename cauchy_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __a, __b;
-      if (__is >> __a >> __b)
-	__x.param(param_type(__a, __b));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -2180,50 +1459,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		    / (_M_gd_y(__urng, __p2) * m()));
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const fisher_f_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.m() << __space << __x.n()
-	   << __space << __x._M_gd_x << __space << __x._M_gd_y;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       fisher_f_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename fisher_f_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __m, __n;
-      if (__is >> __m >> __n >> __x._M_gd_x >> __x._M_gd_y)
-	__x.param(param_type(__m, __n));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _ForwardIterator,
@@ -2253,49 +1488,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	while (__f != __t)
 	  *__f++ =  _M_nd(__urng) * std::sqrt(__p.n() / _M_gd(__urng, __p2));
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const student_t_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.n() << __space << __x._M_nd << __space << __x._M_gd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       student_t_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename student_t_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __n;
-      if (__is >> __n >> __x._M_nd >> __x._M_gd)
-	__x.param(param_type(__n));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _RealType>
@@ -2423,49 +1615,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	    }
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const gamma_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.alpha() << __space << __x.beta()
-	   << __space << __x._M_nd;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       gamma_distribution<_RealType>& __x)
-    {
-      using param_type = typename gamma_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __alpha_val, __beta_val;
-      if (__is >> __alpha_val >> __beta_val >> __x._M_nd)
-	__x.param(param_type(__alpha_val, __beta_val));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _UniformRandomNumberGenerator>
@@ -2499,48 +1648,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 				      __inv_a);
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const weibull_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.a() << __space << __x.b();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       weibull_distribution<_RealType>& __x)
-    {
-      using param_type = typename weibull_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __a, __b;
-      if (__is >> __a >> __b)
-	__x.param(param_type(__a, __b));
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     template<typename _UniformRandomNumberGenerator>
@@ -2572,49 +1679,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  *__f++ = __p.a() - __p.b() * std::log(-std::log(result_type(1)
 							  - __aurng()));
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const extreme_value_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      __os << __x.a() << __space << __x.b();
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       extreme_value_distribution<_RealType>& __x)
-    {
-      using param_type
-	= typename extreme_value_distribution<_RealType>::param_type;
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      _RealType __a, __b;
-      if (__is >> __a >> __b)
-	__x.param(param_type(__a, __b));
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _IntType>
@@ -2707,74 +1771,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	    *__f++ = __pos - __param._M_cp.begin();
 	  }
       }
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const discrete_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<double>::max_digits10);
-
-      std::vector<double> __prob = __x.probabilities();
-      __os << __prob.size();
-      for (auto __dit = __prob.begin(); __dit != __prob.end(); ++__dit)
-	__os << __space << *__dit;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-namespace __detail
-{
-  template<typename _ValT, typename _CharT, typename _Traits>
-    basic_istream<_CharT, _Traits>&
-    __extract_params(basic_istream<_CharT, _Traits>& __is,
-		     vector<_ValT>& __vals, size_t __n)
-    {
-      __vals.reserve(__n);
-      while (__n--)
-	{
-	  _ValT __val;
-	  if (__is >> __val)
-	    __vals.push_back(__val);
-	  else
-	    break;
-	}
-      return __is;
-    }
-} // namespace __detail
-
-  template<typename _IntType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       discrete_distribution<_IntType>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      size_t __n;
-      if (__is >> __n)
-	{
-	  std::vector<double> __prob_vec;
-	  if (__detail::__extract_params(__is, __prob_vec, __n))
-	    __x.param({__prob_vec.begin(), __prob_vec.end()});
-	}
-
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _RealType>
@@ -2929,66 +1925,6 @@ namespace __detail
 	  }
       }
 
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const piecewise_constant_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      std::vector<_RealType> __int = __x.intervals();
-      __os << __int.size() - 1;
-
-      for (auto __xit = __int.begin(); __xit != __int.end(); ++__xit)
-	__os << __space << *__xit;
-
-      std::vector<double> __den = __x.densities();
-      for (auto __dit = __den.begin(); __dit != __den.end(); ++__dit)
-	__os << __space << *__dit;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       piecewise_constant_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      size_t __n;
-      if (__is >> __n)
-	{
-	  std::vector<_RealType> __int_vec;
-	  if (__detail::__extract_params(__is, __int_vec, __n + 1))
-	    {
-	      std::vector<double> __den_vec;
-	      if (__detail::__extract_params(__is, __den_vec, __n))
-		{
-		  __x.param({ __int_vec.begin(), __int_vec.end(),
-			      __den_vec.begin() });
-		}
-	    }
-	}
-
-      __is.flags(__flags);
-      return __is;
-    }
-
 
   template<typename _RealType>
     void
@@ -3133,65 +2069,6 @@ namespace __detail
 	while (__f != __t)
 	  *__f++ = this->operator()(__urng, __param);
       }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_ostream<_CharT, _Traits>&
-    operator<<(std::basic_ostream<_CharT, _Traits>& __os,
-	       const piecewise_linear_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_ostream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __os.flags();
-      const _CharT __fill = __os.fill();
-      const std::streamsize __precision = __os.precision();
-      const _CharT __space = __os.widen(' ');
-      __os.flags(__ios_base::scientific | __ios_base::left);
-      __os.fill(__space);
-      __os.precision(std::numeric_limits<_RealType>::max_digits10);
-
-      std::vector<_RealType> __int = __x.intervals();
-      __os << __int.size() - 1;
-
-      for (auto __xit = __int.begin(); __xit != __int.end(); ++__xit)
-	__os << __space << *__xit;
-
-      std::vector<double> __den = __x.densities();
-      for (auto __dit = __den.begin(); __dit != __den.end(); ++__dit)
-	__os << __space << *__dit;
-
-      __os.flags(__flags);
-      __os.fill(__fill);
-      __os.precision(__precision);
-      return __os;
-    }
-
-  template<typename _RealType, typename _CharT, typename _Traits>
-    std::basic_istream<_CharT, _Traits>&
-    operator>>(std::basic_istream<_CharT, _Traits>& __is,
-	       piecewise_linear_distribution<_RealType>& __x)
-    {
-      using __ios_base = typename basic_istream<_CharT, _Traits>::ios_base;
-
-      const typename __ios_base::fmtflags __flags = __is.flags();
-      __is.flags(__ios_base::dec | __ios_base::skipws);
-
-      size_t __n;
-      if (__is >> __n)
-	{
-	  vector<_RealType> __int_vec;
-	  if (__detail::__extract_params(__is, __int_vec, __n + 1))
-	    {
-	      vector<double> __den_vec;
-	      if (__detail::__extract_params(__is, __den_vec, __n + 1))
-		{
-		  __x.param({ __int_vec.begin(), __int_vec.end(),
-			      __den_vec.begin() });
-		}
-	    }
-	}
-      __is.flags(__flags);
-      return __is;
-    }
 
 
   template<typename _IntType>
