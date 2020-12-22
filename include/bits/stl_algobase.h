@@ -516,27 +516,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
 					     std::__niter_base(__result)));
     }
 
-  template<bool _IsMove,
-	   typename _Ite, typename _Seq, typename _Cat, typename _OI>
-    _OI
-    __copy_move_a(const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-		  const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-		  _OI);
-
-  template<bool _IsMove,
-	   typename _II, typename _Ite, typename _Seq, typename _Cat>
-    __gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>
-    __copy_move_a(_II, _II,
-		  const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&);
-
-  template<bool _IsMove,
-	   typename _IIte, typename _ISeq, typename _ICat,
-	   typename _OIte, typename _OSeq, typename _OCat>
-    ::__gnu_debug::_Safe_iterator<_OIte, _OSeq, _OCat>
-    __copy_move_a(const ::__gnu_debug::_Safe_iterator<_IIte, _ISeq, _ICat>&,
-		  const ::__gnu_debug::_Safe_iterator<_IIte, _ISeq, _ICat>&,
-		  const ::__gnu_debug::_Safe_iterator<_OIte, _OSeq, _OCat>&);
-
   /**
    *  @brief Copies the range [first,last) into result.
    *  @ingroup mutating_algorithms
@@ -750,29 +729,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
 		   std::__niter_base(__result)));
     }
 
-  template<bool _IsMove,
-	   typename _Ite, typename _Seq, typename _Cat, typename _OI>
-    _OI
-    __copy_move_backward_a(
-		const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-		const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-		_OI);
-
-  template<bool _IsMove,
-	   typename _II, typename _Ite, typename _Seq, typename _Cat>
-    __gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>
-    __copy_move_backward_a(_II, _II,
-		const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&);
-
-  template<bool _IsMove,
-	   typename _IIte, typename _ISeq, typename _ICat,
-	   typename _OIte, typename _OSeq, typename _OCat>
-    ::__gnu_debug::_Safe_iterator<_OIte, _OSeq, _OCat>
-    __copy_move_backward_a(
-		const ::__gnu_debug::_Safe_iterator<_IIte, _ISeq, _ICat>&,
-		const ::__gnu_debug::_Safe_iterator<_IIte, _ISeq, _ICat>&,
-		const ::__gnu_debug::_Safe_iterator<_OIte, _OSeq, _OCat>&);
-
   /**
    *  @brief Copies the range [first,last) into result.
    *  @ingroup mutating_algorithms
@@ -913,12 +869,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
     __fill_a(_FIte __first, _FIte __last, const _Tp& __value)
     { std::__fill_a1(__first, __last, __value); }
 
-  template<typename _Ite, typename _Seq, typename _Cat, typename _Tp>
-    void
-    __fill_a(const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-	     const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>&,
-	     const _Tp&);
-
   /**
    *  @brief Fills the range [first,last) with copies of value.
    *  @ingroup mutating_algorithms
@@ -1016,13 +966,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
 	*__first = __tmp;
       return __first;
     }
-
-  template<typename _Ite, typename _Seq, typename _Cat, typename _Size,
-	   typename _Tp>
-    ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>
-    __fill_n_a(const ::__gnu_debug::_Safe_iterator<_Ite, _Seq, _Cat>& __first,
-	       _Size __n, const _Tp& __value,
-	       std::input_iterator_tag);
 
   template<typename _OutputIterator, typename _Size, typename _Tp>
     _GLIBCXX20_CONSTEXPR
@@ -1165,24 +1108,6 @@ _GLIBCXX_END_NAMESPACE_CONTAINER
 			       std::__niter_base(__last1),
 			       std::__niter_base(__first2));
     }
-
-  template<typename _II1, typename _Seq1, typename _Cat1, typename _II2>
-    bool
-    __equal_aux(const ::__gnu_debug::_Safe_iterator<_II1, _Seq1, _Cat1>&,
-		const ::__gnu_debug::_Safe_iterator<_II1, _Seq1, _Cat1>&,
-		_II2);
-
-  template<typename _II1, typename _II2, typename _Seq2, typename _Cat2>
-    bool
-    __equal_aux(_II1, _II1,
-		const ::__gnu_debug::_Safe_iterator<_II2, _Seq2, _Cat2>&);
-
-  template<typename _II1, typename _Seq1, typename _Cat1,
-	   typename _II2, typename _Seq2, typename _Cat2>
-    bool
-    __equal_aux(const ::__gnu_debug::_Safe_iterator<_II1, _Seq1, _Cat1>&,
-		const ::__gnu_debug::_Safe_iterator<_II1, _Seq1, _Cat1>&,
-		const ::__gnu_debug::_Safe_iterator<_II2, _Seq2, _Cat2>&);
 
   template<typename, typename>
     struct __lc_rai

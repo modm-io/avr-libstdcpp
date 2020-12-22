@@ -2234,8 +2234,4 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace
 
-#ifdef _GLIBCXX_DEBUG
-# include <debug/stl_iterator.h>
-#endif
-
 #endif

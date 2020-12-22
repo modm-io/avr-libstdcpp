@@ -32,7 +32,6 @@
 #pragma GCC system_header
 
 #include <bits/c++config.h>
-#include <bits/gthr.h>
 #include <bits/atomic_word.h>
 
 namespace __gnu_cxx _GLIBCXX_VISIBILITY(default)

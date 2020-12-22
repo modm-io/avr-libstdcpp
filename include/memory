@@ -73,7 +73,6 @@
 #  include <typeinfo>         	  // std::type_info in get_deleter
 #  include <iosfwd>           	  // std::basic_ostream
 #  include <ext/atomicity.h>
-#  include <ext/concurrence.h>
 #  include <bits/functexcept.h>
 #  include <bits/stl_function.h>  // std::less
 #  include <bits/uses_allocator.h>
