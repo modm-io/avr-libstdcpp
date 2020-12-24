@@ -150,7 +150,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     __x->_M_parent = __y;
   }
 
-#if !_GLIBCXX_INLINE_VERSION
+#if !defined(_GLIBCXX_INLINE_VERSION)
   /* Static keyword was missing on _Rb_tree_rotate_left.
      Export the symbol for backward compatibility until
      next ABI change.  */
@@ -181,7 +181,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     __x->_M_parent = __y;
   }
 
-#if !_GLIBCXX_INLINE_VERSION
+#if !defined(_GLIBCXX_INLINE_VERSION)
   /* Static keyword was missing on _Rb_tree_rotate_right
      Export the symbol for backward compatibility until
      next ABI change.  */

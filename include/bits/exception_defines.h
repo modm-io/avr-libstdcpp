@@ -30,6 +30,8 @@
 #ifndef _EXCEPTION_DEFINES_H
 #define _EXCEPTION_DEFINES_H 1
 
+#pragma GCC system_header
+
 #if ! __cpp_exceptions
 // Iff -fno-exceptions, transform error handling code to work without it.
 # define __try      if (true)
