@@ -33,7 +33,15 @@
 
 #if __cplusplus >= 201703L
 
+#if __cpp_rtti
 #include <typeinfo>
+#else
+namespace std
+{
+  class type_info;
+}
+#endif // __cpp_rtti
+
 #include <new>
 #include <utility>
 #include <type_traits>
