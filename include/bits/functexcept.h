@@ -60,54 +60,48 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   // Helpers for exception objects in <stdexcept>
   void
-  __throw_logic_error(const char*) __attribute__((__noreturn__));
+  __throw_logic_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_domain_error(const char*) __attribute__((__noreturn__));
+  __throw_domain_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_invalid_argument(const char*) __attribute__((__noreturn__));
+  __throw_invalid_argument(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_length_error(const char*) __attribute__((__noreturn__));
+  __throw_length_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_out_of_range(const char*) __attribute__((__noreturn__));
+  __throw_out_of_range(const char* __s = "") __attribute__((__noreturn__));
+
+  inline void __attribute__((__noreturn__)) __attribute__((always_inline))
+  __throw_out_of_range_fmt(const char*, ...)
+  { __throw_out_of_range(); }
 
   void
-  __throw_out_of_range_fmt(const char*, ...) __attribute__((__noreturn__))
-    __attribute__((__format__(__gnu_printf__, 1, 2)));
+  __throw_runtime_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_runtime_error(const char*) __attribute__((__noreturn__));
+  __throw_range_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_range_error(const char*) __attribute__((__noreturn__));
+  __throw_overflow_error(const char* __s = "") __attribute__((__noreturn__));
 
   void
-  __throw_overflow_error(const char*) __attribute__((__noreturn__));
-
-  void
-  __throw_underflow_error(const char*) __attribute__((__noreturn__));
-
-  // Helpers for exception objects in <ios>
-  void
-  __throw_ios_failure(const char*) __attribute__((__noreturn__));
-
-  void
-  __throw_ios_failure(const char*, int) __attribute__((__noreturn__));
-
-  // Helpers for exception objects in <system_error>
-  void
-  __throw_system_error(int) __attribute__((__noreturn__));
-
-  // Helpers for exception objects in <future>
-  void
-  __throw_future_error(int) __attribute__((__noreturn__));
+  __throw_underflow_error(const char* __s = "") __attribute__((__noreturn__));
 
   // Helpers for exception objects in <functional>
   void
   __throw_bad_function_call() __attribute__((__noreturn__));
+
+  void
+  __throw_bad_optional_access() __attribute__((__noreturn__));
+
+  void
+  __throw_bad_variant_access(const char* __s = "") __attribute__((__noreturn__));
+
+  void
+  __throw_bad_any_cast() __attribute__((__noreturn__));
 
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace

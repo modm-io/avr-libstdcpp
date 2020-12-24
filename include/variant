@@ -1252,35 +1252,10 @@ namespace __variant
 		   && (is_swappable_v<_Types> && ...))>
     swap(variant<_Types...>&, variant<_Types...>&) = delete;
 
-  class bad_variant_access : public exception
-  {
-  public:
-    bad_variant_access() noexcept { }
-
-    const char* what() const noexcept override
-    { return _M_reason; }
-
-  private:
-    bad_variant_access(const char* __reason) noexcept : _M_reason(__reason) { }
-
-    // Must point to a string with static storage duration:
-    const char* _M_reason = "bad variant access";
-
-    friend void __throw_bad_variant_access(const char* __what);
-  };
-
-  // Must only be called with a string literal
   inline void
-  __throw_bad_variant_access(const char* __what)
-  { _GLIBCXX_THROW_OR_ABORT(bad_variant_access(__what)); }
-
-  inline void
-  __throw_bad_variant_access(bool __valueless)
+  __throw_bad_variant_access(bool __valueless __attribute__((unused)))
   {
-    if (__valueless) [[__unlikely__]]
-      __throw_bad_variant_access("std::get: variant is valueless");
-    else
-      __throw_bad_variant_access("std::get: wrong index for variant");
+    __throw_bad_variant_access("");
   }
 
   template<typename... _Types>
