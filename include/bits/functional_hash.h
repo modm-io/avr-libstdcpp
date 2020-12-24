@@ -250,15 +250,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       }
     };
 
-  /// Specialization for long double.
-  template<>
-    struct hash<long double>
-    : public __hash_base<size_t, long double>
-    {
-      _GLIBCXX_PURE size_t
-      operator()(long double __val) const noexcept;
-    };
-
 #if __cplusplus >= 201703L
   template<>
     struct hash<nullptr_t> : public __hash_base<size_t, nullptr_t>
