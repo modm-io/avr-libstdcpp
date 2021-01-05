@@ -61,6 +61,7 @@
 #define _STL_ITERATOR_H 1
 
 #include <bits/cpp_type_traits.h>
+#include <bits/exception_defines.h>
 #include <ext/type_traits.h>
 #include <bits/move.h>
 #include <bits/ptr_traits.h>
