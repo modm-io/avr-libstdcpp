@@ -74,6 +74,87 @@
 #undef tan
 #undef tanh
 
+// Fix float math functions defined as macros in avr libc
+#ifdef __AVR__
+
+#undef cosf
+#undef sinf
+#undef tanf
+#undef fabsf
+#undef fmodf
+#undef cbrtf
+#undef hypotf
+#undef squaref
+#undef floorf
+#undef ceilf
+#undef frexpf
+#undef ldexpf
+#undef expf
+#undef coshf
+#undef sinhf
+#undef tanhf
+#undef acosf
+#undef asinf
+#undef atanf
+#undef atan2f
+#undef logf
+#undef log10f
+#undef powf
+#undef isnanf
+#undef isinff
+#undef isfinitef
+#undef copysignf
+#undef signbitf
+#undef fdimf
+#undef fmaf
+#undef fmaxf
+#undef fminf
+#undef truncf
+#undef roundf
+#undef lroundf
+#undef lrintf
+
+extern "C"
+{
+  float cosf(float x);
+  float sinf(float x);
+  float tanf(float x);
+  float fabsf(float x);
+  float fmodf(float x, float y);
+  float cbrtf(float x);
+  float hypotf(float x, float y);
+  float squaref(float x);
+  float floorf(float x);
+  float ceilf(float x);
+  float frexpf(float value, int* exp);
+  float ldexpf(float x, int exp);
+  float expf(float x);
+  float coshf(float x);
+  float sinhf(float x);
+  float tanhf(float x);
+  float acosf(float x);
+  float asinf(float x);
+  float atanf(float x);
+  float atan2f(float y, float x);
+  float logf(float x);
+  float log10f(float x);
+  float powf(float x, float y);
+  bool isnanf(float x);
+  bool isinff(float x);
+  bool isfinitef(float x);
+  float copysignf(float x, float y);
+  int signbitf(float x);
+  float fdimf(float x, float y);
+  float fmaf(float x, float y, float z);
+  float fmaxf(float x, float y);
+  float fminf(float x, float y);
+  float truncf(float x);
+  float roundf(float x);
+  long lroundf(float x);
+  long lrintf(float x);
+} // extern "C"
+#endif // __AVR__
+
 extern "C++"
 {
 namespace std _GLIBCXX_VISIBILITY(default)
