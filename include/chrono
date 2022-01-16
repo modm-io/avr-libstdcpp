@@ -1,4 +1,4 @@
-// <chrono> -*- C++ -*-
+﻿// <chrono> -*- C++ -*-
 
 // Copyright (C) 2008-2020 Free Software Foundation, Inc.
 //
@@ -1079,6 +1079,49 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   } // namespace chrono
 
 #endif // C++14
+
+  namespace chrono
+  {
+    class high_resolution_clock
+    {
+    public:
+      // The high_resolution_clock counter is steady. Each subsequent call
+      // of std::chrono::high_resolution_clock::now() returns a later time
+      // than any previous call.
+      static constexpr bool is_steady = true;
+
+      // Defines the accuracy of the (hardware) high resolution clock.
+      using duration   = chrono::microseconds;
+      using rep        = duration::rep;
+      using period     = duration::period;
+      using time_point = chrono::time_point<high_resolution_clock, duration>;
+
+      static auto to_time_t(const time_point& t) -> std::time_t
+      {
+        return static_cast<std::time_t>(duration_cast<chrono::seconds>(t.time_since_epoch()).count());
+      }
+
+      static auto from_time_t(std::time_t t) -> time_point
+      {
+        using local_from_type = chrono::time_point<high_resolution_clock, seconds>;
+
+        return time_point_cast<high_resolution_clock::duration>
+        (
+          static_cast<local_from_type>(chrono::seconds(t))
+        );
+      }
+
+      // !!! PLATFORM AND OS SPECIFIC IMPLEMENTATION !!!
+      static auto now() noexcept -> time_point;
+    };
+
+    #if !defined(MODM_CHRONO_STEADY_CLOCK)
+    #define MODM_CHRONO_STEADY_CLOCK steady_clock
+    #endif
+
+    // use high_resolution_clock as steady_clock
+    using MODM_CHRONO_STEADY_CLOCK = high_resolution_clock;
+  }
 
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
