@@ -1,0 +1,25 @@
+name: Compile Examples
+
+on: [pull_request]
+
+jobs:
+  unittests-linux-generic:
+    runs-on: ubuntu-20.04
+    container:
+      image: ghcr.io/modm-ext/modm-build-avr:latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Check environment
+        run: |
+          env
+          which avr-g++
+          avr-g++ --version
+
+      - name: Compile Examples
+        run: |
+          for example in $(find examples/ | grep Makefile); do
+            (cd $(dirname $example) && make -j4)
+          done
