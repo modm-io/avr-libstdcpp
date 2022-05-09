@@ -26,8 +26,7 @@ auto integral
 	RealFunctionType real_function
 ) noexcept -> RealValueType
 {
-	using real_value_type    = RealValueType;
-	using real_function_type = RealFunctionType;
+	using real_value_type = RealValueType;
 
 	std::uint_fast32_t n2(1);
 
