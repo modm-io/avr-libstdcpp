@@ -135,32 +135,22 @@ extern "C"
     return ::pow(x, y);
   }
 
-  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
-  bool isnanf(float x)
-  #else
   int isnanf(float x)
-  #endif
   {
     return ::isnan(x);
   }
 
-  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
-  bool isinff(float x)
-  #else
   int isinff(float x)
-  #endif
   {
     return ::isinf(x);
   }
 
   #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
-  bool isfinitef(float x)
+  int isfinitef(float x)
   {
     return ::isfinite(x);
   }
-  #endif
 
-  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   float copysignf(float x, float y)
   {
     return ::copysign(x, y);
