@@ -33,10 +33,12 @@ extern "C"
     return ::tan(x);
   }
 
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   float fabsf(float x)
   {
     return ::fabs(x);
   }
+  #endif
 
   float fmodf(float x, float y)
   {
@@ -153,17 +155,17 @@ extern "C"
 
   #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   bool isfinitef(float x)
-  #else
-  int isfinitef(float x)
-  #endif
   {
     return ::isfinite(x);
   }
+  #endif
 
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   float copysignf(float x, float y)
   {
     return ::copysign(x, y);
   }
+  #endif
 
   int signbitf(float x)
   {
