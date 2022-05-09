@@ -139,9 +139,9 @@ extern "C"
   float logf(float x);
   float log10f(float x);
   float powf(float x, float y);
-  bool isnanf(float x);
-  bool isinff(float x);
-  bool isfinitef(float x);
+  int isnanf(float x);
+  int isinff(float x);
+  int isfinitef(float x);
   float copysignf(float x, float y);
   int signbitf(float x);
   float fdimf(float x, float y);
