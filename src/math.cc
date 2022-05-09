@@ -12,6 +12,10 @@
 
 #ifdef __AVR__
 
+#if !defined(MODM_CMATH_GCC_VERSION)
+#define MODM_CMATH_GCC_VERSION ((__GNUC__ * 10000L) + (__GNUC_MINOR__ * 100L) + __GNUC_PATCHLEVEL__)
+#endif
+
 extern "C"
 {
   float cosf(float x)
@@ -129,17 +133,29 @@ extern "C"
     return ::pow(x, y);
   }
 
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   bool isnanf(float x)
+  #else
+  int isnanf(float x)
+  #endif
   {
     return ::isnan(x);
   }
 
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   bool isinff(float x)
+  #else
+  int isinff(float x)
+  #endif
   {
     return ::isinf(x);
   }
 
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
   bool isfinitef(float x)
+  #else
+  int isfinitef(float x)
+  #endif
   {
     return ::isfinite(x);
   }

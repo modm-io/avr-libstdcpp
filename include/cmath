@@ -49,8 +49,6 @@
 #ifndef _GLIBCXX_CMATH
 #define _GLIBCXX_CMATH 1
 
-#define MODM_CMATH_GCC_VERSION ((__GNUC__ * 10000L) + (__GNUC_MINOR__ * 100L) + __GNUC_PATCHLEVEL__)
-
 // Get rid of those macros defined in <math.h> in lieu of real functions.
 #undef div
 #undef acos
@@ -78,6 +76,10 @@
 
 // Fix float math functions defined as macros in avr libc
 #ifdef __AVR__
+
+#if !defined(MODM_CMATH_GCC_VERSION)
+#define MODM_CMATH_GCC_VERSION ((__GNUC__ * 10000L) + (__GNUC_MINOR__ * 100L) + __GNUC_PATCHLEVEL__)
+#endif
 
 #undef cosf
 #undef sinf
