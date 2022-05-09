@@ -49,6 +49,8 @@
 #ifndef _GLIBCXX_CMATH
 #define _GLIBCXX_CMATH 1
 
+#define MODM_CMATH_GCC_VERSION ((__GNUC__ * 10000L) + (__GNUC_MINOR__ * 100L) + __GNUC_PATCHLEVEL__)
+
 // Get rid of those macros defined in <math.h> in lieu of real functions.
 #undef div
 #undef acos
@@ -139,9 +141,15 @@ extern "C"
   float logf(float x);
   float log10f(float x);
   float powf(float x, float y);
+  #if defined(MODM_CMATH_GCC_VERSION) && (MODM_CMATH_GCC_VERSION < 110300L)
+  bool isnanf(float x);
+  bool isinff(float x);
+  bool isfinitef(float x);
+  #else
   int isnanf(float x);
   int isinff(float x);
   int isfinitef(float x);
+  #endif
   float copysignf(float x, float y);
   int signbitf(float x);
   float fdimf(float x, float y);
