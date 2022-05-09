@@ -72,7 +72,7 @@ auto is_close_fraction
 (
 	const FloatingPointType a,
 	const FloatingPointType b,
-	const FloatingPointType tol = FloatingPointType(std::numeric_limits<FloatingPointType>::epsilon() * NumericType(100))
+	const FloatingPointType tol = FloatingPointType(std::numeric_limits<FloatingPointType>::epsilon() * FloatingPointType(100))
 ) noexcept -> bool
 {
 	using std::fabs;

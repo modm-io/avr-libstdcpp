@@ -25,7 +25,7 @@ WARNFLAGS+=-Wno-volatile
 endif
 
 CXXFLAGS=-std=$(STD) -O2 $(WARNFLAGS) -fno-exceptions -fno-rtti -fno-unwind-tables -fno-threadsafe-statics -Wshadow -Wcast-qual -Wpointer-arith -Wundef
-LDFLAGS=
+LDFLAGS=-lm
 
 TARGET=$(BUILD_DIR)/$(NAME)
 
