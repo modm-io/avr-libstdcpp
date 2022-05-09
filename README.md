@@ -265,6 +265,12 @@ The widths depend on the compiler command line options `-mdouble=32`
 `std::exp()` and the like will, therefore, have input and output
 widths according to these command line options.
 
+- **`<cmath>`:** In compiler versions of `avr-gcc` 11 and higher,
+slight discrepancies in the signatures of functions like
+`isnan()`, `isinf()`, etc. seem to be in the process of being corrected.
+Future patches of math function signatures in `<cmath>`
+may be needed as the `<math.h>` header continues to evolve.
+
 ## C++20 `constexpr` support
 
 The following is a rather advanced, highly useful topic.

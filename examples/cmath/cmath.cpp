@@ -17,15 +17,18 @@ namespace local {
 
 namespace detail {
 
-template<typename real_value_type, typename real_function_type>
+template<typename RealValueType, typename RealFunctionType>
 auto integral
 (
-	const real_value_type& a,
-	const real_value_type& b,
-	const real_value_type& tol,
-	real_function_type real_function
-) noexcept -> real_value_type
+	const RealValueType& a,
+	const RealValueType& b,
+	const RealValueType& tol,
+	RealFunctionType real_function
+) noexcept -> RealValueType
 {
+	using real_value_type    = RealValueType;
+	using real_function_type = RealFunctionType;
+
 	std::uint_fast32_t n2(1);
 
 	real_value_type step = ((b - a) / 2U);
@@ -75,11 +78,13 @@ auto is_close_fraction
 	const FloatingPointType tol = FloatingPointType(std::numeric_limits<FloatingPointType>::epsilon() * FloatingPointType(100))
 ) noexcept -> bool
 {
+	using floating_point_type = FloatingPointType;
+
 	using std::fabs;
 
-	const FloatingPointType ratio     = fabs(FloatingPointType((FloatingPointType(1) * a) / b));
+	const floating_point_type ratio     = fabs(floating_point_type((floating_point_type(1) * a) / b));
 
-	const FloatingPointType closeness = fabs(FloatingPointType(1 - ratio));
+	const floating_point_type closeness = fabs(floating_point_type(1 - ratio));
 
 	return (closeness < tol);
 }
@@ -96,9 +101,9 @@ template<>                           constexpr long double        pi_v<long doub
 template<typename FloatingPointType>
 auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcept -> FloatingPointType
 {
-	using local_float_type = FloatingPointType;
+	using floating_point_type = FloatingPointType;
 
-	constexpr local_float_type epsilon = std::numeric_limits<local_float_type>::epsilon();
+	constexpr floating_point_type epsilon = std::numeric_limits<floating_point_type>::epsilon();
 
 	using std::cos;
 	using std::sin;
@@ -109,15 +114,15 @@ auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcep
 	const auto integration_result =
 	detail::integral
 	(
-		static_cast<local_float_type>(0),
-		detail::pi_v<local_float_type>,
+		static_cast<floating_point_type>(0),
+		detail::pi_v<floating_point_type>,
 		tol,
-		[&x, &n](const local_float_type& t) noexcept -> local_float_type
+		[&x, &n](const floating_point_type& t) noexcept -> floating_point_type
 		{
-			return cos(x * sin(t) - (t * static_cast<local_float_type>(n)));
+			return cos(x * sin(t) - (t * static_cast<floating_point_type>(n)));
 		});
 
-	const auto jn = static_cast<local_float_type>(integration_result / detail::pi_v<local_float_type>);
+	const auto jn = static_cast<floating_point_type>(integration_result / detail::pi_v<floating_point_type>);
 
 	return jn;
 }
