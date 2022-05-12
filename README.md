@@ -33,9 +33,9 @@ in 2020 modernized the port to include many modern C++20 features.
 - There are also a handful of source files located in the [src directory](./src). Some of these may potentially be needed.
 - For instance, when doing floating-point mathematical calculations with the `<cmath>` library, the file [`math.cc`](./src/math.cc) located [here](./src) needs to be added as a normal source file to your project.
 
-For example:
 
-Simply add the `-isystem` (or alternatively the `-I`) include path
+For straightforward header-only use, for example,
+simply add the `-isystem` (or alternatively the `-I`) include path
 to your particular location of `avr-libstdcpp/include` on the command line...
 
 ```sh
@@ -68,10 +68,10 @@ can be found in the [examples](./examples) folder.
 The include path of the headers needs to be added to the project settings in the normal way.
 Add also any of the necessary source files, as described in the section above.
 
-This is an advanced use of `avr-libstdcpp` in combination with MICROCHIP'sATMEL Studio
+This is an advanced use of `avr-libstdcpp` in combination with MICROCHIP's ATMEL Studio
 because the underlying GCC compiler used with ATMEL Studio also needs to be
-upgraded to a much more modern one than the GCC5 delivered in the standard installation
-of this studio.
+upgraded to a much more modern one than the `avr-gcc` 5
+delivered in the standard installation of this studio.
 
 An [informative thread](https://github.com/modm-io/avr-libstdcpp/issues/17#issuecomment-1098241768)
 provides a few more details on how to use `avr-libstdcpp` with MICROCHIP's ATMEL Studio.
