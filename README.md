@@ -28,9 +28,10 @@ in 2020 modernized the port to include many modern C++20 features.
 
 ## Using the library
 
-Add the `avr-libstdcpp/include` path to the standard `-I`
-include path(s) of the compiler on the command line.
-Upon doing this, include standard library headers in the usual way.
+- Add the `avr-libstdcpp/include` path to the standard `-I` include path(s) of the compiler on the command line.
+- Upon doing this, include standard library headers in the usual way (i.e., `#include <algorithm>`,  `#include <array>`,  `#include <cstdint>`, etc.).
+- There are also a handful of source files located in the [src directory](./src). Some of these may potentially be needed.
+- For instance, when doing floating-point mathematical calculations with the `<cmath>` library, the file [`math.cc`](./src/math.cc) located [here](./src) needs to be added as a normal source file to your project.
 
 For example:
 
@@ -61,6 +62,20 @@ int main()
 Additional straightforward code samples exercising standard library usage
 can be found in the [examples](./examples) folder.
 
+## Using the library with MICROCHIP's ATMEL Studio
+
+`avr-libstdcpp` can be successfully used with MICROCHIP's ATMEL Studio.
+The include path of the headers needs to be added to the project settings in the normal way.
+Add also any of the necessary source files, as described in the section above.
+
+This is an advanced use of `avr-libstdcpp` in combination with MICROCHIP'sATMEL Studio
+because the underlying GCC compiler used with ATMEL Studio also needs to be
+upgraded to a much more modern one than the GCC5 delivered in the standard installation
+of this studio.
+
+An [informative thread](https://github.com/modm-io/avr-libstdcpp/issues/17#issuecomment-1098241768)
+provides a few more details on how to use `avr-libstdcpp` with MICROCHIP's ATMEL Studio.
+
 ## Guidance for tiny bare-metal systems
 
 ### Very helpful go-to libraries
@@ -85,7 +100,7 @@ and their main uses includes, but is not limited to,:
 
 - `<array>` for containers having known, fixed size.
 - `<algorithm>` for standard algorithms such as sorting, minimax, sequential operations, etc.
-- `<cmath>` for projects requiring floating-point mathematical functions such as `std::sin()`, `std::exp()`, `std::frexp()` and many more.
+- `<cmath>` for projects requiring floating-point mathematical functions such as `std::sin()`, `std::exp()`, `std::frexp()` and many more. For some mathematical uses, it might be necessary to include [`math.cc`](./src/math.cc) in your project. This source file is located [here](./src).
 - `<cstdint>` which defines integral types having specified widths residing within `namespace std` like `std::uint8_t`.
 - `<limits>` offering compile-time query of numeric limits of built-in types.
 - `<numeric>` featuring a collection of useful numeric algorithms such as `std::accumulate()`, etc.
@@ -223,7 +238,7 @@ and their directly relevant code sequences have been removed.
 Simple mechanisms such as those found in `<cassert>`
 and `<cerrno>`, however, remain mostly available.
 
-- **`<atomic>`:** Even though the intended compilers are build with no threading,
+- **`<atomic>`:** Even though the intended compilers are built with no threading,
 the `<atomic>` library and its use as a dependency has
 been removed. This means that atomic functions and
 atomic store/load functions are not available. So if you are sharing
