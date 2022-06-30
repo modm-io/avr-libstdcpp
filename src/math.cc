@@ -33,7 +33,7 @@ extern "C"
     return ::tan(x);
   }
 
-  #if (MODM_CMATH_GCC_VERSION < 110300L)
+  #if (MODM_CMATH_GCC_VERSION < 100300L)
   float fabsf(float x)
   {
     return ::fabs(x);
@@ -145,7 +145,7 @@ extern "C"
     return ::isinf(x);
   }
 
-  #if (MODM_CMATH_GCC_VERSION < 110300L)
+  #if (MODM_CMATH_GCC_VERSION < 100300L)
   int isfinitef(float x)
   {
     return ::isfinite(x);
