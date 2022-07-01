@@ -11,10 +11,7 @@
 #include <cmath>
 
 #ifdef __AVR__
-
-#if !defined(MODM_CMATH_GCC_VERSION)
-#define MODM_CMATH_GCC_VERSION ((__GNUC__ * 10000L) + (__GNUC_MINOR__ * 100L) + __GNUC_PATCHLEVEL__)
-#endif
+#include <avr/version.h>
 
 extern "C"
 {
@@ -33,7 +30,7 @@ extern "C"
     return ::tan(x);
   }
 
-  #if (MODM_CMATH_GCC_VERSION < 110300L)
+  #if defined(__AVR_LIBC_VERSION__) && (__AVR_LIBC_VERSION__ < 20100UL)
   float fabsf(float x)
   {
     return ::fabs(x);
@@ -145,7 +142,7 @@ extern "C"
     return ::isinf(x);
   }
 
-  #if (MODM_CMATH_GCC_VERSION < 110300L)
+  #if defined(__AVR_LIBC_VERSION__) && (__AVR_LIBC_VERSION__ < 20100UL)
   int isfinitef(float x)
   {
     return ::isfinite(x);
