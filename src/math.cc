@@ -15,6 +15,7 @@
 
 extern "C"
 {
+  #if defined(__AVR_LIBC_VERSION__) && (__AVR_LIBC_VERSION__ < 20100UL)
   float cosf(float x)
   {
     return ::cos(x);
@@ -30,12 +31,10 @@ extern "C"
     return ::tan(x);
   }
 
-  #if defined(__AVR_LIBC_VERSION__) && (__AVR_LIBC_VERSION__ < 20100UL)
   float fabsf(float x)
   {
     return ::fabs(x);
   }
-  #endif
 
   float fmodf(float x, float y)
   {
@@ -142,7 +141,6 @@ extern "C"
     return ::isinf(x);
   }
 
-  #if defined(__AVR_LIBC_VERSION__) && (__AVR_LIBC_VERSION__ < 20100UL)
   int isfinitef(float x)
   {
     return ::isfinite(x);
@@ -152,7 +150,6 @@ extern "C"
   {
     return ::copysign(x, y);
   }
-  #endif
 
   int signbitf(float x)
   {
@@ -198,6 +195,7 @@ extern "C"
   {
     return ::lrint(x);
   }
+  #endif
 } // extern "C"
 
 #endif // __AVR__
