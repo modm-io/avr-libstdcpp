@@ -348,3 +348,14 @@ Using the port way back to `avr-gcc` 5, for instance, does not work
 at the moment in today's form of the checked-in library,
 as the older compiler's lexical parser is not capable of
 properly handling some of the library's template code.
+
+## Licensing
+
+The library source files in [`src/`](./src/)
+and the library include files in [`include/` and its subfolders](./include/)
+(with two exceptions for the sources, as mentioned below)
+are licensed under [GNU General Public License Version 3](./COPYING3) or higher.
+
+The [example codes](./examples/) and two library source files
+(namely `functexcept.cc` and `math.cc` in [`src/`](./src/))
+are subject to the terms of the [Mozilla Public License Version 2.0](./COPYING.MPLv2).
