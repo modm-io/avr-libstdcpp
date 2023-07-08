@@ -30,7 +30,7 @@ in 2020 modernized the port to include many contemporary C++20 features.
 
 - Add the `avr-libstdcpp/include` path to the standard `-isystem` (or `-I`) include path(s) of the compiler on the command line.
 - Upon doing this, include standard library headers in the usual way (i.e., `#include <algorithm>`,  `#include <array>`,  `#include <cstdint>`, etc.).
-- There is also a handful of source files located in the [src directory](./src). Some of these may potentially be needed.
+- There are also several source files located in the [src directory](./src). Some of these may potentially be needed.
 - For instance, when doing floating-point mathematical calculations with the `<cmath>` library, the file [`math.cc`](./src/math.cc) located [here](./src) needs to be added as a normal source file to your project.
 
 
