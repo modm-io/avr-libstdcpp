@@ -24,13 +24,13 @@ _embedded_-_friendly_ adaptation of the aforementioned work.
 The `avr-libstdcpp` port began in 2018 with an initial import
 of a GNU/GCC-based C++ standard library from GCC 8.
 A second import of a GNU/GCC-based C++ standard library from GCC 10
-in 2020 modernized the port to include many modern C++20 features.
+in 2020 modernized the port to include many contemporary C++20 features.
 
 ## Using the library
 
-- Add the `avr-libstdcpp/include` path to the standard `-I` include path(s) of the compiler on the command line.
+- Add the `avr-libstdcpp/include` path to the standard `-isystem` (or `-I`) include path(s) of the compiler on the command line.
 - Upon doing this, include standard library headers in the usual way (i.e., `#include <algorithm>`,  `#include <array>`,  `#include <cstdint>`, etc.).
-- There are also a handful of source files located in the [src directory](./src). Some of these may potentially be needed.
+- There are also several source files located in the [src directory](./src). Some of these may potentially be needed.
 - For instance, when doing floating-point mathematical calculations with the `<cmath>` library, the file [`math.cc`](./src/math.cc) located [here](./src) needs to be added as a normal source file to your project.
 
 
@@ -109,7 +109,7 @@ and their main uses includes, but is not limited to,:
 With these libraries alone, the entire project can benefit
 from a great deal of the standard library's power without compromising
 in any way on performance or sleek memory footprint.
-This is because these libaries typically require no additional storage.
+This is because these libaries are typically lean, fast and require no additional storage.
 
 The following non-trivial, real-world example, for instance,
 wraps instances of an overly-simplified LED class abstraction
@@ -251,7 +251,7 @@ has been removed.
 
 - **Hashing:** Hashing has been optimized for tiny architectures and uses a rudimentary 16-bit CRC algorithm.
 
-- **`<chrono>`:** Only certain selected the clock functions of `<chrono>` library are implemented.
+- **`<chrono>`:** Only certain judiciously selected clock functions from the `<chrono>` library are implemented.
 These include `std::chrono::high_resolution_clock` and `std::chrono::steady_clock`. When using
 these clocks, it is required to implement the clock's static method
 `now()` in a project-specific fashion. This is because
@@ -343,9 +343,10 @@ in the [./examples/numeric](./examples/numeric) directory.
 
 `avr-libstdcpp` is intended for a modern `avr-gcc`
 such as the 11.2 port available in the [modm-io project](https://github.com/modm-io/avr-gcc)
-repository. Tests show usability also for `avr-gcc` 10.
-Using the port way back to `avr-gcc` 5, for instance, does not work
-at the moment in today's form of the checked-in library,
+repository. Tests show usability also for `avr-gcc` 10 through 13 (and beyond).
+
+Using the port way back to `avr-gcc` 5, however, does not work
+at the moment with today's form of the checked-in library,
 as the older compiler's lexical parser is not capable of
 properly handling some of the library's template code.
 
