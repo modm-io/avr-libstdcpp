@@ -38,6 +38,7 @@
 
 #include <bits/c++config.h>
 #include <bits/exception_defines.h>
+#include <bits/error_constants.h>
 
 namespace std _GLIBCXX_VISIBILITY(default)
 {
@@ -89,6 +90,10 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   void
   __throw_underflow_error(const char* __s = "") __attribute__((__noreturn__));
+
+  // Helpers for exception objects in <system_error>
+  void
+  __throw_system_error(int) __attribute__((__noreturn__));
 
   // Helpers for exception objects in <functional>
   void
