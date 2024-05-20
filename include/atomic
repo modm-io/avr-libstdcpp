@@ -34,6 +34,10 @@
 
 #pragma GCC system_header
 
+#if __has_include(<bits/atomic_builtins.h>)
+# include <bits/atomic_builtins.h>
+#endif
+
 #if __cplusplus < 201103L
 # include <bits/c++0x_warning.h>
 #else
