@@ -297,7 +297,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   // extract the elements in a tuple.
   template<size_t... _Indexes> struct _Index_tuple { };
 
-#if __GNUC__ >= 8 || defined(_GLIBCXX_USE_MAKE_INTEGER_SEQ)
+#if __GNUC__ >= 8
 
 #ifdef __has_builtin
 # if __has_builtin(__make_integer_seq)
@@ -318,7 +318,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       using __type = _Index_tuple<__integer_pack(_Num)...>;
 #endif
     };
-#else
+#else // __GNUC__ < 8
   // Concatenates two _Index_tuples.
   template<typename _Itup1, typename _Itup2> struct _Itup_cat;
 
@@ -346,13 +346,13 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     {
       typedef _Index_tuple<> __type;
     };
-#endif // __GNUC__ >= 8 || defined(_GLIBCXX_USE_MAKE_INTEGER_SEQ)
+#endif // __GNUC__ < 8
 
 #if __cplusplus > 201103L
 
 #define __cpp_lib_integer_sequence 201304
 
-#if __GNUC__ >= 8 || defined(_GLIBCXX_USE_MAKE_INTEGER_SEQ)
+#if __GNUC__ >= 8
   /// Class template integer_sequence
   template<typename _Tp, _Tp... _Idx>
     struct integer_sequence
@@ -372,7 +372,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
 #undef _GLIBCXX_USE_MAKE_INTEGER_SEQ
 
-#else
+#else // __GNUC__ < 8
   /// Class template integer_sequence
   template<typename _Tp, _Tp... _Idx>
     struct integer_sequence
@@ -398,7 +398,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   template<typename _Tp, _Tp _Num>
     using make_integer_sequence
       = typename _Make_integer_sequence<_Tp, _Num>::__type;
-#endif // __GNUC__ >= 8 || defined(_GLIBCXX_USE_MAKE_INTEGER_SEQ)
+#endif // __GNUC__ < 8
 
   /// Alias template index_sequence
   template<size_t... _Idx>
