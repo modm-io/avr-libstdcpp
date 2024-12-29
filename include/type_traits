@@ -359,6 +359,15 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     struct __is_integral_helper<unsigned __GLIBCXX_TYPE_INT_N_3>
     : public true_type { };
 #endif
+#if defined __AVR__
+  template<>
+    struct __is_integral_helper<__int24>
+    : public true_type { };
+
+  template<>
+    struct __is_integral_helper<__uint24>
+    : public true_type { };
+#endif
 
   /// is_integral
   template<typename _Tp>
@@ -601,6 +610,10 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #if defined(__GLIBCXX_TYPE_INT_N_3)
 	  , signed __GLIBCXX_TYPE_INT_N_3
 #endif
+#if defined __AVR__
+	  , __int24
+#endif
+
 	  >;
 
   // Check if a type is one of the unsigned integer types.
@@ -620,6 +633,10 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #if defined(__GLIBCXX_TYPE_INT_N_3)
 	  , unsigned __GLIBCXX_TYPE_INT_N_3
 #endif
+#if defined __AVR__
+	  , __uint24
+#endif
+
 	  >;
 
   // Check if a type is one of the signed or unsigned integer types.
@@ -2032,7 +2049,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     struct __make_unsigned<__GLIBCXX_TYPE_INT_N_3>
     { typedef unsigned __GLIBCXX_TYPE_INT_N_3 __type; };
 #endif
-
+#if defined __AVR__
+  template<>
+    struct __make_unsigned<__int24>
+    { typedef __uint24 __type; };
+#endif
   // Select between integral and enum: not possible to be both.
   template<typename _Tp,
 	   bool _IsInt = is_integral<_Tp>::value,
@@ -2185,6 +2206,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   template<>
     struct __make_signed<unsigned __GLIBCXX_TYPE_INT_N_3>
     { typedef __GLIBCXX_TYPE_INT_N_3 __type; };
+#endif
+#if defined __AVR__
+  template<>
+    struct __make_signed<__uint24>
+    { typedef __int24 __type; };
 #endif
 
   // Select between integral and enum: not possible to be both.
