@@ -37,15 +37,15 @@ $(TARGET).hex: $(TARGET).elf
 	avr-objcopy -O ihex -j .data -j .text $(TARGET).elf $(TARGET).hex
 
 $(TARGET).elf: $(OBJECTS)
-	avr-g++ $(LDFLAGS) -mmcu=$(MCU) $(OBJECTS) -o $(TARGET).elf
+	avr-g++ $(LDFLAGS) -mmcu=$(MCU) -mdouble=64 -mlong-double=64 $(OBJECTS) -o $(TARGET).elf
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
+	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) -mdouble=64 -mlong-double=64 $(INCLUDES) $< -o $@
 
 $(BUILD_DIR)/%.cc.o: %.cc
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
+	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) -mdouble=64 -mlong-double=64 $(INCLUDES) $< -o $@
 
 size: $(TARGET).elf
 	avr-objdump -Pmem-usage $(TARGET).elf

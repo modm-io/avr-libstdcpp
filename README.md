@@ -342,8 +342,8 @@ in the [./examples/numeric](./examples/numeric) directory.
 ## Additional details
 
 `avr-libstdcpp` is intended for a modern `avr-gcc`
-such as the 11.2 port available in the [modm-io project](https://github.com/modm-io/avr-gcc)
-repository. Tests show usability also for `avr-gcc` 10 through 13 (and beyond).
+such as the port available in the [modm-io project](https://github.com/modm-io/avr-gcc)
+repository. Tests show usability also for `avr-gcc` 7 through 14 (and beyond).
 
 Using the port way back to `avr-gcc` 5, however, does not work
 at the moment with today's form of the checked-in library,

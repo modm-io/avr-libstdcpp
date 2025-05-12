@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2022, Christopher Kormanyos
+ * Copyright (c) 2022, 2025, Christopher Kormanyos
  *
  * This file is part of the modm project.
  *
@@ -33,7 +33,7 @@ auto integral
 	real_value_type step = ((b - a) / 2U);
 	real_value_type result = (real_function(a) + real_function(b)) * step;
 
-	const std::uint_fast8_t k_max = UINT8_C(32);
+	constexpr std::uint_fast8_t k_max { UINT8_C(32) };
 
 	for(std::uint_fast8_t k = UINT8_C(0); k < k_max; ++k)
 	{
@@ -80,12 +80,29 @@ auto is_close_fraction
 	using floating_point_type = FloatingPointType;
 
 	using std::fabs;
+	using std::fpclassify;
 
-	const floating_point_type ratio     = fabs(floating_point_type((floating_point_type(1) * a) / b));
+	const int fpc_a { fpclassify(a) };
+	const int fpc_b { fpclassify(b) };
 
-	const floating_point_type closeness = fabs(floating_point_type(1 - ratio));
+	bool result_is_ok { };
 
-	return (closeness < tol);
+	if(fpc_b == FP_ZERO)
+	{
+		const floating_point_type closeness { (fpc_a == FP_ZERO) ? floating_point_type { 0 } : fabs(a - b) };
+
+		result_is_ok = (closeness < tol);
+	}
+	else
+	{
+		const floating_point_type ratio     = fabs(floating_point_type((floating_point_type(1) * a) / b));
+
+		const floating_point_type closeness = fabs(floating_point_type(1 - ratio));
+
+		result_is_ok = (closeness < tol);
+	}
+
+	return result_is_ok;
 }
 
 // N[Pi, 51]
@@ -108,7 +125,7 @@ auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcep
 	using std::sin;
 	using std::sqrt;
 
-	const auto tol = sqrt(epsilon);
+	const floating_point_type tol { sqrt(epsilon) };
 
 	const auto integration_result =
 	detail::integral
@@ -121,7 +138,7 @@ auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcep
 			return cos(x * sin(t) - (t * static_cast<floating_point_type>(n)));
 		});
 
-	const auto jn = static_cast<floating_point_type>(integration_result / detail::pi_v<floating_point_type>);
+	const floating_point_type jn { static_cast<floating_point_type>(integration_result / detail::pi_v<floating_point_type>) };
 
 	return jn;
 }
@@ -130,9 +147,9 @@ auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcep
 
 auto main() -> int
 {
-	using my_float_type = long double;
+	using my_float_type = std::double_t;
 
-	static_assert((std::numeric_limits<my_float_type>::digits >= 24), "Error: Incorrect my_float_type type definition");
+	static_assert((std::numeric_limits<my_float_type>::digits >= 53), "Error: Incorrect my_float_type type definition");
 
 	constexpr my_float_type my_tol =
 		static_cast<my_float_type>
