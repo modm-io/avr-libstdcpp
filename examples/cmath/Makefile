@@ -24,8 +24,8 @@ ifeq ($(STD),c++20)
 WARNFLAGS+=-Wno-volatile
 endif
 
-CXXFLAGS=-std=$(STD) -O2 $(WARNFLAGS) -mdouble=64 -mlong-double=64 -fno-exceptions -fno-rtti -fno-unwind-tables -fno-threadsafe-statics -Wshadow -Wcast-qual -Wpointer-arith -Wundef
-LDFLAGS=-x none $(CXXFLAGS) -lm
+CXXFLAGS=-std=$(STD) -O2 $(WARNFLAGS) -fno-exceptions -fno-rtti -fno-unwind-tables -fno-threadsafe-statics -Wshadow -Wcast-qual -Wpointer-arith -Wundef
+LDFLAGS=-lm
 
 TARGET=$(BUILD_DIR)/$(NAME)
 

@@ -147,9 +147,9 @@ auto cyl_bessel_j(const std::uint_fast8_t n, const FloatingPointType& x) noexcep
 
 auto main() -> int
 {
-	using my_float_type = std::double_t;
+	using my_float_type = std::float_t;
 
-	static_assert((std::numeric_limits<my_float_type>::digits >= 53), "Error: Incorrect my_float_type type definition");
+	static_assert((std::numeric_limits<my_float_type>::digits == 24), "Error: Incorrect my_float_type type definition");
 
 	constexpr my_float_type my_tol =
 		static_cast<my_float_type>
