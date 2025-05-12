@@ -24,8 +24,8 @@ ifeq ($(STD),c++20)
 WARNFLAGS+=-Wno-volatile
 endif
 
-CXXFLAGS=-std=$(STD) -O2 $(WARNFLAGS) -fno-exceptions -fno-rtti -fno-unwind-tables -fno-threadsafe-statics -Wshadow -Wcast-qual -Wpointer-arith -Wundef
-LDFLAGS=-lm
+CXXFLAGS=-std=$(STD) -O2 $(WARNFLAGS) -mdouble=64 -mlong-double=64 -fno-exceptions -fno-rtti -fno-unwind-tables -fno-threadsafe-statics -Wshadow -Wcast-qual -Wpointer-arith -Wundef
+LDFLAGS=-x none $(CXXFLAGS) -lm
 
 TARGET=$(BUILD_DIR)/$(NAME)
 
@@ -41,11 +41,11 @@ $(TARGET).elf: $(OBJECTS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) -mdouble=64 -mlong-double=64 $(INCLUDES) $< -o $@
+	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
 
 $(BUILD_DIR)/%.cc.o: %.cc
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) -mdouble=64 -mlong-double=64 $(INCLUDES) $< -o $@
+	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
 
 size: $(TARGET).elf
 	avr-objdump -Pmem-usage $(TARGET).elf
