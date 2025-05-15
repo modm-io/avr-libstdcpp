@@ -611,27 +611,18 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #undef islessgreater
 #undef isunordered
 
-#if defined(FP_NAN)
-#undef FP_NAN
-#endif
-#if defined(FP_INFINITE)
-#undef FP_INFINITE
-#endif
-#if defined(FP_ZERO)
-#undef FP_ZERO
-#endif
-#if defined(FP_SUBNORMAL)
-#undef FP_SUBNORMAL
-#endif
-#if defined(FP_NORMAL)
-#undef FP_NORMAL
-#endif
-
+#if !defined(FP_NAN) && !defined(FP_INFINITE) && !defined(FP_ZERO) \
+  && !defined(FP_SUBNORMAL) && !defined(FP_NORMAL)
 #define FP_NAN         0
 #define FP_INFINITE    1
 #define FP_ZERO        2
 #define FP_SUBNORMAL   3
 #define FP_NORMAL      4
+#elif !defined(FP_NAN) || !defined(FP_INFINITE) || !defined(FP_ZERO) \
+  || !defined(FP_SUBNORMAL) || !defined(FP_NORMAL)
+#error "Some floating-point number classification macros are missing."
+#error "Either define all of them or define none of them so that <cmath> can do it."
+#endif
 
 #if __cplusplus >= 201103L
 
