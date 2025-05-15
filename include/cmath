@@ -611,7 +611,54 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #undef islessgreater
 #undef isunordered
 
+#if defined(FP_NAN)
+#undef FP_NAN
+#endif
+#if defined(FP_INFINITE)
+#undef FP_INFINITE
+#endif
+#if defined(FP_ZERO)
+#undef FP_ZERO
+#endif
+#if defined(FP_SUBNORMAL)
+#undef FP_SUBNORMAL
+#endif
+#if defined(FP_NORMAL)
+#undef FP_NORMAL
+#endif
+
+#define FP_NAN         0
+#define FP_INFINITE    1
+#define FP_ZERO        2
+#define FP_SUBNORMAL   3
+#define FP_NORMAL      4
+
 #if __cplusplus >= 201103L
+
+#ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_FP
+  constexpr int
+  fpclassify(float __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+                               FP_SUBNORMAL, FP_ZERO, __x); }
+
+  constexpr int
+  fpclassify(double __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+                               FP_SUBNORMAL, FP_ZERO, __x); }
+
+  constexpr int
+  fpclassify(long double __x)
+  { return __builtin_fpclassify(FP_NAN, FP_INFINITE, FP_NORMAL,
+                               FP_SUBNORMAL, FP_ZERO, __x); }
+#endif
+
+#ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_INT
+  template<typename _Tp>
+    constexpr typename __gnu_cxx::__enable_if<__is_integer<_Tp>::__value,
+                                              int>::__type
+    fpclassify(_Tp __x)
+    { return __x != 0 ? FP_NORMAL : FP_ZERO; }
+#endif
 
 #ifndef __CORRECT_ISO_CPP11_MATH_H_PROTO_FP
   constexpr bool
@@ -890,21 +937,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     }
 #endif
 
-  #if !defined(FP_NAN)
-  #define FP_NAN         0
-  #endif
-  #if !defined(FP_INFINITE)
-  #define FP_INFINITE    1
-  #endif
-  #if !defined(FP_ZERO)
-  #define FP_ZERO        2
-  #endif
-  #if !defined(FP_SUBNORMAL)
-  #define FP_SUBNORMAL   3
-  #endif
-  #if !defined(FP_NORMAL)
-  #define FP_NORMAL      4
-  #endif
+#else
 
   template<typename _Tp>
     inline typename __gnu_cxx::__enable_if<__is_arithmetic<_Tp>::__value,
