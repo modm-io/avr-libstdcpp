@@ -238,12 +238,9 @@ and their directly relevant code sequences have been removed.
 Simple mechanisms such as those found in `<cassert>`
 and `<cerrno>`, however, remain mostly available.
 
-- **`<atomic>`:** Even though the intended compilers are built with no threading,
-the `<atomic>` library and its use as a dependency has
-been removed. This means that atomic functions and
-atomic store/load functions are not available. So if you are sharing
-data in an operating system or mixed program/interrupt mode,
-self-written atomic primitives are needed.
+- **`<atomic>`:** The `<atomic>` library is being handled
+specifically in the draft of
+[avr-libstdcpp/pull/36](https://github.com/modm-io/avr-libstdcpp/pull/36).
 
 - **`<random>`:** There is no source of entropy whatsoever on these platforms
 in their standard configuration. So `std::random_device`
@@ -279,12 +276,6 @@ The widths depend on the compiler command line options `-mdouble=32`
 `<cmath>` functions such as `std::sin()`, `std::cos()`,
 `std::exp()` and the like will, therefore, have input and output
 widths according to these command line options.
-
-- **`<cmath>`:** In compiler versions of `avr-gcc` 11 and higher,
-slight discrepancies in the signatures of functions like
-`isnan()`, `isinf()`, etc. seem to be in the process of being corrected.
-Future patches of math function signatures in `<cmath>`
-may be needed as the `<math.h>` header continues to evolve.
 
 ## C++20 `constexpr` support
 
@@ -337,18 +328,24 @@ int main()
 ```
 
 See also the [numeric.cpp](./examples/numeric/numeric.cpp) file
-in the [./examples/numeric](./examples/numeric) directory.
+in the [/examples/numeric](./examples/numeric) directory.
 
 ## Additional details
 
 `avr-libstdcpp` is intended for a modern `avr-gcc`
-such as the 11.2 port available in the [modm-io project](https://github.com/modm-io/avr-gcc)
-repository. Tests show usability also for `avr-gcc` 10 through 13 (and beyond).
+such as the port available in the [modm-io project](https://github.com/modm-io/avr-gcc)
+repository. Tests show usability for `avr-gcc` 7 through 15.
 
-Using the port way back to `avr-gcc` 5, however, does not work
+This library has been checked for compatibility on `avr-gcc`
+with language standards C++11,14,17,20,23 and 2c.
+
+Using the port way back to `avr-gcc` 5 does not work
 at the moment with today's form of the checked-in library,
-as the older compiler's lexical parser is not capable of
-properly handling some of the library's template code.
+and `avr-gcc` 7 or higher is required.
+This is because the very old compiler lexical parsers are not capable
+of properly handling some of the library's template code.
+See also [avr-libstdcpp/issues/15](https://github.com/modm-io/avr-libstdcpp/issues/15)
+which is closed and includes justification for its closure.
 
 ## Licensing
 
@@ -357,6 +354,6 @@ and the library include files in [`include/` and its subfolders](./include/)
 (with two exceptions for the sources, as mentioned below)
 are licensed under [GNU General Public License Version 3](./COPYING3) or higher.
 
-The [example codes](./examples/) and two library source files
+All of the [example codes](./examples/) and also two library source files
 (namely `functexcept.cc` and `math.cc` in [`src/`](./src/))
 are subject to the terms of the [Mozilla Public License Version 2.0](./COPYING.MPLv2).

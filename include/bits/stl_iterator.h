@@ -2150,6 +2150,12 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		    const counted_iterator<_It2>& __y)
 	{ return __y._M_length <=> __x._M_length; }
 
+    private:
+      template<input_or_output_iterator _It2> friend class counted_iterator;
+
+      _It _M_current = _It();
+      iter_difference_t<_It> _M_length = 0;
+
       friend constexpr iter_rvalue_reference_t<_It>
       iter_move(const counted_iterator& __i)
       noexcept(noexcept(ranges::iter_move(__i._M_current)))
@@ -2162,12 +2168,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 		  const counted_iterator<_It2>& __y)
 	noexcept(noexcept(ranges::iter_swap(__x._M_current, __y._M_current)))
 	{ ranges::iter_swap(__x._M_current, __y._M_current); }
-
-    private:
-      template<input_or_output_iterator _It2> friend class counted_iterator;
-
-      _It _M_current = _It();
-      iter_difference_t<_It> _M_length = 0;
     };
 
   template<typename _It>
