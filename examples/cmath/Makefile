@@ -7,15 +7,17 @@ endif
 
 BUILD_DIR=./build
 LIB_DIR=../..
+AVR_CXX ?= avr-g++
+include $(LIB_DIR)/avr-libstdcpp.mk
 
 ifeq ($(INC),)
-INCLUDES= -I$(LIB_DIR)/include
+INCLUDES= -I$(AVR_LIBSTDCPP_INCLUDE)
 else
 INCLUDES= -I$(INC)
 endif
 
-SOURCES=$(LIB_DIR)/examples/cmath/cmath.cpp
-VPATH=.:$(LIB_DIR)/examples/cmath
+SOURCES=$(LIB_DIR)/examples/cmath/cmath.cpp $(AVR_LIBSTDCPP_SOURCES)
+VPATH=.:$(LIB_DIR)/examples/cmath:$(AVR_LIBSTDCPP_DIR)/src
 OBJECTS=$(addprefix $(BUILD_DIR)/,$(notdir $(SOURCES:%=%.o)))
 
 WARNFLAGS=-Wall -Wextra -pedantic
@@ -37,15 +39,15 @@ $(TARGET).hex: $(TARGET).elf
 	avr-objcopy -O ihex -j .data -j .text $(TARGET).elf $(TARGET).hex
 
 $(TARGET).elf: $(OBJECTS)
-	avr-g++ $(LDFLAGS) -mmcu=$(MCU) $(OBJECTS) -o $(TARGET).elf
+	$(AVR_CXX) $(LDFLAGS) -mmcu=$(MCU) $(OBJECTS) -o $(TARGET).elf
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
+	$(AVR_CXX) -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
 
 $(BUILD_DIR)/%.cc.o: %.cc
 	@mkdir -p $(BUILD_DIR)
-	avr-g++ -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
+	$(AVR_CXX) -c $(CXXFLAGS) -mmcu=$(MCU) $(INCLUDES) $< -o $@
 
 size: $(TARGET).elf
 	avr-objdump -Pmem-usage $(TARGET).elf

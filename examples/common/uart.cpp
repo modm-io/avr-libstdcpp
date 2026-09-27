@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2018, Christopher Durand
+ * Copyright (c) 2026, Niklas Hauser
  *
  * This file is part of the modm project.
  *
@@ -9,6 +10,7 @@
  */
 // ----------------------------------------------------------------------------
 
+// Connects stdin and stdout to USART0, so that printf() and getchar() work.
 #define BAUD 9600
 
 #ifndef F_CPU
