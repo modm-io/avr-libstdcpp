@@ -1,0 +1,198 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+  # Monthly check whether new avr-gcc releases change the generated header sets
+  schedule:
+    - cron: '0 6 1 * *'
+
+jobs:
+  tests:
+    name: avr-gcc ${{ matrix.gcc }}
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc: [8, 9, 10, 11, 12, 13, 14, 15]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install avr-gcc and simavr
+        run: |
+          brew tap osx-cross/avr
+          brew trust osx-cross/avr || true
+          brew install avr-gcc@${{ matrix.gcc }} osx-cross/avr/simavr
+          echo "AVR_CXX=$(brew --prefix avr-gcc@${{ matrix.gcc }})/bin/avr-g++" >> $GITHUB_ENV
+
+      - name: Run integration tests
+        run: make -C tests AVR_CXX=$AVR_CXX
+
+      - name: Build examples with the newest C++ standard
+        run: make -C examples AVR_CXX=$AVR_CXX
+
+      - name: Build examples with C++17
+        run: make -C examples AVR_CXX=$AVR_CXX STD=c++17
+
+  generate:
+    name: Reproduce header sets
+    runs-on: macos-15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install compilers
+        run: |
+          brew tap osx-cross/avr
+          brew trust osx-cross/avr || true
+          brew install avr-gcc@8 avr-gcc@10 avr-gcc@11 avr-gcc@12 avr-gcc@13 avr-gcc@14 avr-gcc@15
+
+      - name: Show compiler versions
+        run: |
+          for version in 8 10 11 12 13 14 15; do
+            echo "avr-gcc@$version: $($(brew --prefix avr-gcc@$version)/bin/avr-g++ -dumpfullversion)"
+          done
+
+      - name: Generate header sets
+        run: tools/generate.py
+
+      - name: Check that the header sets are up to date
+        run: |
+          git status --porcelain
+          git diff --stat
+          test -z "$(git status --porcelain)"
+
+      - name: Check for new GCC versions
+        run: |
+          supported=$(cd tools && python3 -B -c 'import generate; print(max(generate.SETS))')
+          avr=$(ls "$(brew --repo osx-cross/avr)/Formula" | sed -nE 's/^avr-gcc@([0-9]+)\.rb$/\1/p' | sort -n | tail -1)
+          echo "Newest supported avr-gcc $supported, newest available avr-gcc $avr"
+          if [ "$avr" -gt "$supported" ]; then
+            echo "::error::A new avr-gcc version is available, see docs/generating.md"
+            exit 1
+          fi
+
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/modm-ext/modm-build-avr:2026-09-28
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check environment
+        run: avr-g++ --version
+
+      - name: Build integration tests
+        run: make -C tests build
+
+      - name: Build examples
+        run: make -C examples
+
+  distributions:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Debian trixie
+            image: debian:trixie
+            install: apt-get update && apt-get install -y --no-install-recommends gcc-avr avr-libc binutils-avr simavr make perl
+            tests: all
+          # Fedora does not package simavr, so the tests are only compiled
+          - name: Fedora
+            image: fedora:latest
+            install: dnf install -y avr-gcc-c++ avr-libc make perl
+            tests: build
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install avr-gcc
+        run: ${{ matrix.install }}
+
+      - name: Check environment
+        run: avr-g++ --version
+
+      - name: Run integration tests
+        run: make -C tests ${{ matrix.tests }}
+
+      - name: Build examples with the newest C++ standard
+        run: make -C examples
+
+      - name: Build examples with C++17
+        run: make -C examples STD=c++17
+
+  windows:
+    name: Windows avr-gcc ${{ matrix.version }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Newest Windows build of each avr-gcc version by Zak Kemble, except
+        # avr-gcc 10.1, which crashes on <ranges> with C++20
+        include:
+          - { version: 8.3.0, platform: x64-mingw }
+          - { version: 9.2.0, platform: x64-mingw }
+          - { version: 11.1.0, platform: x64-windows }
+          - { version: 12.1.0, platform: x64-windows }
+          - { version: 13.2.0, platform: x64-windows }
+          - { version: 14.1.0, platform: x64-windows }
+          - { version: 15.2.0, platform: x64-windows }
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install avr-gcc
+        run: |
+          curl -sLf -o avr-gcc.zip https://github.com/ZakKemble/avr-gcc-build/releases/download/v${{ matrix.version }}-1/avr-gcc-${{ matrix.version }}-${{ matrix.platform }}.zip
+          unzip -q avr-gcc.zip -d /c/avr
+          cygpath -w /c/avr/*/bin >> $GITHUB_PATH
+
+      - name: Check environment
+        run: |
+          avr-g++ --version
+          make --version
+
+      # There is no simavr for Windows, so the tests are only compiled
+      - name: Build integration tests
+        run: make -C tests build
+
+      - name: Build examples with the newest C++ standard
+        run: make -C examples
+
+      - name: Build examples with C++17
+        run: make -C examples STD=c++17
+
+  keep-alive:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Re-enable workflow
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: sh
+        run: |
+          case "${GITHUB_WORKFLOW_REF:?}" in
+            "${GITHUB_REPOSITORY:?}"/.github/workflows/*.y*ml@*) ;;
+            *) false ;;
+          esac
+          workflow="${GITHUB_WORKFLOW_REF%%@*}"
+          workflow="${workflow#${GITHUB_REPOSITORY}/.github/workflows/}"
+          gh api -X PUT "repos/${GITHUB_REPOSITORY}/actions/workflows/${workflow}/enable"
