@@ -1,0 +1,12 @@
+#pragma GCC system_header // avr-libstdcpp
+#if __GNUC__ >= 14
+#error "<debug/array> is not available with this avr-gcc version"
+#elif __GNUC__ >= 13
+#error "<debug/array> is not available with this avr-gcc version"
+#elif __GNUC__ >= 11
+#error "<debug/array> is not available with this avr-gcc version"
+#elif __GNUC__ >= 8
+#include "../../gcc10/include/debug/array"
+#else
+#error "avr-libstdcpp requires avr-gcc 8 or newer"
+#endif
