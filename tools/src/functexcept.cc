@@ -68,19 +68,19 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	{ __builtin_abort(); }
 
 	void __attribute__((weak))
-	__throw_bad_optional_access()
+	__throw_bad_array_new_length()
 	{ __builtin_abort(); }
 
 	void __attribute__((weak))
-	__throw_bad_variant_access(const char* __s __attribute__((unused)))
+	__throw_out_of_range_fmt(const char* __s __attribute__((unused)), ...)
+	{ __builtin_abort(); }
+
+	void __attribute__((weak))
+	__throw_system_error(int __i __attribute__((unused)))
 	{ __builtin_abort(); }
 
 	void __attribute__((weak))
 	__throw_bad_function_call()
-	{ __builtin_abort(); }
-
-	void __attribute__((weak))
-	__throw_bad_any_cast()
 	{ __builtin_abort(); }
 
 _GLIBCXX_END_NAMESPACE_VERSION

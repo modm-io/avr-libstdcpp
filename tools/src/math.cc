@@ -196,6 +196,32 @@ extern "C"
     return ::lrint(x);
   }
   #endif
+
+  #if __SIZEOF_DOUBLE__ == __SIZEOF_FLOAT__ && __AVR_LIBC_VERSION__ >= 20100UL && __AVR_LIBC_VERSION__ < 20200UL
+  // avr-libc 2.1 only implements the float functions and declares the double
+  // functions as assembler aliases. However, the compiler builtins used by the
+  // libstdc++ headers (e.g. in the hashtable rehash policy) reference the
+  // double symbols directly, so we have to provide them.
+  __attribute__((weak)) double avr_libstdcpp_ceil(double x) __asm__("ceil");
+  double avr_libstdcpp_ceil(double x) { return ::ceilf(x); }
+  __attribute__((weak)) double avr_libstdcpp_floor(double x) __asm__("floor");
+  double avr_libstdcpp_floor(double x) { return ::floorf(x); }
+  __attribute__((weak)) double avr_libstdcpp_fabs(double x) __asm__("fabs");
+  double avr_libstdcpp_fabs(double x) { return ::fabsf(x); }
+  #endif
+
+  #if __SIZEOF_LONG_DOUBLE__ == __SIZEOF_DOUBLE__
+  // Used by the hashtable rehash policy, but missing in avr-libc < 2.2
+  __attribute__((weak)) long double floorl(long double x)
+  {
+    return ::floor(x);
+  }
+
+  __attribute__((weak)) long double ceill(long double x)
+  {
+    return ::ceil(x);
+  }
+  #endif
 } // extern "C"
 
 #endif // __AVR__
