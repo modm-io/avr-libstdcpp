@@ -41,6 +41,7 @@ SETS = {
     12: 11,  # avr-gcc 11, 12
     13: 13,  # avr-gcc 13
     15: 14,  # avr-gcc 14, 15
+    16: 16,  # avr-gcc 16
 }
 
 # Only the libstdc++ sources and what its configure script needs
@@ -170,6 +171,10 @@ def generate(newest, oldest, out):
     # The special math functions (std::beta, ...) are implemented in the TR1 headers,
     # which are removed above
     patch(config, r"^(#\s*define _GLIBCXX_USE_STD_SPEC_FUNCS) 1", r"\1 0")
+    # GCC 16 converts timeouts to struct timespec, which avr-libc does not define.
+    # There is nothing to sleep on either, so std::this_thread::sleep_for() is removed.
+    if (dst / "bits/chrono.h").exists() and "::timespec" in read(dst / "bits/chrono.h"):
+        patch(config, r"^/\* #undef (_GLIBCXX_NO_SLEEP) \*/", r"#define \1 1 // avr-libstdcpp")
     # GCC 13 and 14.1 crash on the std::float32_t overloads, since float and
     # double are both 32-bit on AVR.
     if avr_version in (13, 14):

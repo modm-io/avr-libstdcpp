@@ -17,7 +17,7 @@ avr-libc, so we run it with avr-gcc and only install the headers.
 [`tools/generate.py`](../tools/generate.py) generates the header sets listed
 in its `SETS` table, each defined by the newest and the oldest avr-gcc version
 that it supports. The newest `avr-g++` determines the GCC release: the headers
-of avr-gcc 15.2.0 are generated from the `releases/gcc-15.2.0` tag. The oldest
+of avr-gcc 16.2.0 are generated from the `releases/gcc-16.2.0` tag. The oldest
 `avr-g++` is used to check the headers, since older compilers are stricter.
 
 For every set it performs these steps:
@@ -46,6 +46,8 @@ For every set it performs these steps:
      TR1 headers,
    - for GCC 13 and 14.1, undefine `__STDCPP_FLOAT32_T__` to avoid an internal
      compiler error.
+   - for GCC 16, define `_GLIBCXX_NO_SLEEP`, since `<chrono>` otherwise
+     converts timeouts to `struct timespec`, which avr-libc does not define.
    - remove the `extern template` declarations of `std::string` in
      `bits/basic_string.tcc`, since libstdc++ instantiates it in the compiled
      library. The compiler then instantiates only the members that are used.
@@ -70,20 +72,23 @@ For every set it performs these steps:
    the oldest `avr-g++` and fail on any error.
 
 All modifications are marked with an `avr-libstdcpp` comment, so you can find
-them with `grep -r avr-libstdcpp gcc15/include`. Every patch fails the
+them with `grep -r avr-libstdcpp gcc16/include`. Every patch fails the
 generation if it no longer applies, except the ones that are only required for
 some GCC versions.
 
 
 ## Redirecting to the header sets
 
-After all sets are generated into `gcc10`, `gcc12`, `gcc13` and `gcc15`, the
-`include` and `src` directories are regenerated. For every file in any set,
-they contain a file that redirects to the header set of the avr-gcc version:
+After all sets are generated into `gcc10`, `gcc12`, `gcc13`, `gcc15` and
+`gcc16`, the `include` and `src` directories are regenerated. For every file
+in any set, they contain a file that redirects to the header set of the
+avr-gcc version:
 
 ```cpp
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#include "../gcc16/include/vector"
+#elif __GNUC__ >= 14
 #include "../gcc15/include/vector"
 #elif __GNUC__ >= 13
 #include "../gcc13/include/vector"
@@ -116,21 +121,20 @@ Homebrew:
 
 ```sh
 brew tap osx-cross/avr
-brew install avr-gcc@8 avr-gcc@10 avr-gcc@11 avr-gcc@12 avr-gcc@13 avr-gcc@14 avr-gcc@15
+brew install avr-gcc@8 avr-gcc@10 avr-gcc@11 avr-gcc@12 avr-gcc@13 avr-gcc@14 avr-gcc@15 avr-gcc@16
 tools/generate.py
 ```
 
 On other systems, set the compilers with environment variables:
 
 ```sh
-AVR_GXX_15=/opt/avr-gcc-15/bin/avr-g++ \
-AVR_GXX_14=/opt/avr-gcc-14/bin/avr-g++ \
-tools/generate.py 15:14
+AVR_GXX_16=/opt/avr-gcc-16/bin/avr-g++ \
+tools/generate.py 16:16
 ```
 
 The output must be reproducible: the CI regenerates all sets with the newest
 avr-gcc releases every month and fails if anything changed, for example when
-Homebrew updates avr-gcc@15 to a new GCC release. Then regenerate the sets
+Homebrew updates avr-gcc@16 to a new GCC release. Then regenerate the sets
 locally, run the tests and commit the result.
 
 
@@ -161,11 +165,11 @@ sets:
 
 ## Adding a new GCC version
 
-For example for GCC 16:
+For example for GCC 17:
 
-1. Install `avr-gcc@16`.
+1. Install `avr-gcc@17`.
 2. Check which avr-gcc versions can parse the new headers by generating them
-   into `gcc16` with the oldest candidate: `tools/generate.py 16:15`
+   into `gcc17` with the oldest candidate: `tools/generate.py 17:16`
 3. If the generation fails, the script prints the compiler errors. Adapt the
    patches in `tools/generate.py` so that they work for all versions.
 4. Add the new set to `SETS` in `tools/generate.py`, the C++ standard to

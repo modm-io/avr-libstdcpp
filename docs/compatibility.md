@@ -6,19 +6,20 @@ The libstdc++ headers are written for the compiler of the same GCC release.
 Newer headers use compiler builtins and language features that older compilers
 do not understand, and some compilers cannot parse older headers either.
 
-We generated headers from GCC 9 to 15 and parsed all of them with every
+We generated headers from GCC 9 to 16 and parsed all of them with every
 avr-gcc version, which resulted in this matrix (✓ = all headers compile with the newest supported standard):
 
-| avr-gcc | GCC 9 | GCC 10 | GCC 11 | GCC 12 | GCC 13 | GCC 14 | GCC 15 |
-|---------|-------|--------|--------|--------|--------|--------|--------|
-| 8       | ✓     | C++17  | ✗      | ✗      | ✗      | ✗      | ✗      |
-| 9       | ✓     | C++17  | ✗      | ✗      | ✗      | ✗      | ✗      |
-| 10      | ✓     | ✓      | ✗      | ✗      | ✗      | ✗      | ✗      |
-| 11      | ✓     | ✓      | ✓      | ✓      | ✗      | ✗      | ✗      |
-| 12      | ✓     | ✓      | ✓      | ✓      | ✗      | ✗      | ✗      |
-| 13      | ✗     | ✗      | ✗      | ✗      | ✓      | ✗      | ✗      |
-| 14      | ✓     | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      |
-| 15      | ✓     | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      |
+| avr-gcc | GCC 9 | GCC 10 | GCC 11 | GCC 12 | GCC 13 | GCC 14 | GCC 15 | GCC 16 |
+|---------|-------|--------|--------|--------|--------|--------|--------|--------|
+| 8       | ✓     | C++17  | ✗      | ✗      | ✗      | ✗      | ✗      | ✗      |
+| 9       | ✓     | C++17  | ✗      | ✗      | ✗      | ✗      | ✗      | ✗      |
+| 10      | ✓     | ✓      | ✗      | ✗      | ✗      | ✗      | ✗      | ✗      |
+| 11      | ✓     | ✓      | ✓      | ✓      | ✗      | ✗      | ✗      | ✗      |
+| 12      | ✓     | ✓      | ✓      | ✓      | ✗      | ✗      | ✗      | ✗      |
+| 13      | ✗     | ✗      | ✗      | ✗      | ✓      | ✗      | ✗      | ✗      |
+| 14      | ✓     | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      | ✗      |
+| 15      | ✓     | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      | ✗      |
+| 16      | ✓     | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      | ✓      |
 
 Some notable failures:
 
@@ -28,6 +29,8 @@ Some notable failures:
   identifier, nor newer headers ("explicit template argument list not allowed").
 - avr-gcc 8 and 9 do not implement concepts, which the GCC 10 headers require
   in C++20 mode.
+- avr-gcc ≤ 15 cannot parse the GCC 16 headers, which use C++26 language
+  features such as structured binding packs.
 
 To provide the newest library features for every compiler, avr-libstdcpp uses
 the newest headers each compiler can parse:
@@ -37,7 +40,8 @@ the newest headers each compiler can parse:
 | `gcc10`    | GCC 10.5       | 8, 9, 10         | C++17 (8, 9), C++20  |
 | `gcc12`    | GCC 12.5       | 11, 12           | C++17 to C++23       |
 | `gcc13`    | GCC 13.4       | 13               | C++17 to C++23       |
-| `gcc15`    | GCC 15.2       | 14, 15           | C++17 to C++26       |
+| `gcc15`    | GCC 15.3       | 14, 15           | C++17 to C++26       |
+| `gcc16`    | GCC 16.2       | 16               | C++17 to C++26       |
 
 Each set is generated from the GCC release of the newest avr-gcc it supports,
 see [generating the header sets](generating.md). The `include` and `src`
@@ -59,13 +63,14 @@ which ship with these avr-libc versions:
 | avr-gcc | avr-libc |
 |---------|----------|
 | 8.5     | 2.1.0    |
-| 9.4     | 2.1.0    |
+| 9.5     | 2.1.0    |
 | 10.5    | 2.1.0    |
 | 11.5    | 2.0.0    |
 | 12.5    | 2.2.1    |
 | 13.4    | 2.2.1    |
-| 14.3    | 2.2.1    |
-| 15.2    | 2.2.1    |
+| 14.4    | 2.2.1    |
+| 15.3    | 2.2.1    |
+| 16.2    | 2.3.2    |
 
 
 ## Notes for specific versions
@@ -105,6 +110,12 @@ overloads with `std::float32_t` in C++23, since `float` and `double` are both
 32-bit on AVR. The `gcc13` and `gcc15` header sets therefore undefine
 `__STDCPP_FLOAT32_T__` for these compilers, so `std::float32_t` is not
 available.
+
+### avr-gcc 16
+
+`std::this_thread::sleep_for()` and `sleep_until()` are not declared, since
+the GCC 16 headers implement them with `struct timespec`, which avr-libc does
+not define. With older compilers they are declared, but fail to link.
 
 ### Calendar and time zones
 

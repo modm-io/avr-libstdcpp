@@ -4,7 +4,7 @@
 
 avr-gcc supports modern C++, but does not ship a C++ standard library.
 avr-libstdcpp provides the libstdc++ headers of GCC, adapted for avr-libc, for
-avr-gcc 8 to 15 and C++17 to C++26.
+avr-gcc 8 to 16 and C++17 to C++26.
 
 ```cpp
 #include <algorithm>
@@ -43,7 +43,7 @@ avr-g++ -std=c++23 -Os -mmcu=atmega328p -fno-exceptions -fno-rtti -fno-threadsaf
         -I$LIB/include main.cpp $LIB/src/*.cc $LIB/runtime/*.cpp -o main.elf -lm
 ```
 
-This works with avr-gcc 8 to 15: The headers and sources select the header
+This works with avr-gcc 8 to 16: The headers and sources select the header
 set for your compiler version themselves (see [compatibility](docs/compatibility.md)).
 With Make, [`avr-libstdcpp.mk`](avr-libstdcpp.mk) also provides the newest
 C++ standard supported by your compiler:
@@ -103,7 +103,7 @@ and C++17 by default.
 | Path | Content |
 |------|---------|
 | `include`, `src` | Redirect every file to the header set of your avr-gcc version |
-| `gcc10`, `gcc12`, `gcc13`, `gcc15` | The generated header sets, each with `include` and `src` |
+| `gcc10`, `gcc12`, `gcc13`, `gcc15`, `gcc16` | The generated header sets, each with `include` and `src` |
 | `avr-libstdcpp.mk` | Paths and the newest C++ standard for Make |
 | `runtime` | Optional implementations of `new`, `delete`, the C++ ABI and atomics |
 | `tools` | The generator and the library sources |

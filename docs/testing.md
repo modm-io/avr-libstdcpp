@@ -60,7 +60,7 @@ skipped.
 The [CI](../.github/workflows/ci.yml) runs these jobs:
 
 - **Tests**: builds and runs the integration tests and builds all examples with
-  every supported avr-gcc version from Homebrew, avr-gcc 8 to 15.
+  every supported avr-gcc version from Homebrew, avr-gcc 8 to 16.
 - **Generate**: installs the newest toolchains of each GCC version,
   regenerates all header sets and fails if the result differs from the
   committed files. It also fails if Homebrew provides a newer GCC version than
@@ -72,7 +72,7 @@ The [CI](../.github/workflows/ci.yml) runs these jobs:
   of Debian trixie (also used by Ubuntu 26.04) and Fedora. The tests only run
   on Debian, since Fedora does not package simavr.
 - **Windows**: builds the tests and examples with the Windows builds of
-  avr-gcc 8.3 to 15.2 (except 10.1) by [Zak Kemble](https://github.com/ZakKemble/avr-gcc-build).
+  avr-gcc 8.3 to 16.1 (except 10.1) by [Zak Kemble](https://github.com/ZakKemble/avr-gcc-build).
   These are older point releases than the Homebrew builds. There is no simavr
   for Windows, so the tests are not run.
 - **Keep-alive**: re-enables the workflow, since GitHub disables scheduled

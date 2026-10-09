@@ -28,7 +28,7 @@ else ifeq ($(AVR_LIBSTDCPP_GCC),10)
 AVR_LIBSTDCPP_STD := c++20
 else ifneq ($(filter 11 12 13,$(AVR_LIBSTDCPP_GCC)),)
 AVR_LIBSTDCPP_STD := c++23
-else ifneq ($(filter 14 15,$(AVR_LIBSTDCPP_GCC)),)
+else ifneq ($(filter 14 15 16,$(AVR_LIBSTDCPP_GCC)),)
 AVR_LIBSTDCPP_STD := c++26
 else
 $(error avr-libstdcpp does not support avr-gcc '$(AVR_LIBSTDCPP_GCC)' ($(AVR_CXX)))

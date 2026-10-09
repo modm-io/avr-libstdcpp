@@ -18,6 +18,7 @@ redirect to the set of your avr-gcc version. The C++ standards differ however:
 | 11, 12   | `gcc12`    | C++23               |
 | 13       | `gcc13`    | C++23               |
 | 14, 15   | `gcc15`    | C++26               |
+| 16       | `gcc16`    | C++26               |
 
 You can check your version with `avr-g++ -dumpversion`.
 
@@ -81,7 +82,7 @@ It defines these variables:
 
 | Variable                | Content                                            |
 |-------------------------|----------------------------------------------------|
-| `AVR_LIBSTDCPP_GCC`     | The major version of `$(AVR_CXX)`, e.g. `15`       |
+| `AVR_LIBSTDCPP_GCC`     | The major version of `$(AVR_CXX)`, e.g. `16`       |
 | `AVR_LIBSTDCPP_STD`     | The newest supported C++ standard, e.g. `c++26`    |
 | `AVR_LIBSTDCPP_DIR`     | The path to avr-libstdcpp                          |
 | `AVR_LIBSTDCPP_INCLUDE` | The include path                                   |

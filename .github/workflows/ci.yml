@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gcc: [8, 9, 10, 11, 12, 13, 14, 15]
+        gcc: [8, 9, 10, 11, 12, 13, 14, 15, 16]
 
     steps:
       - name: Check out repository
@@ -50,11 +50,11 @@ jobs:
         run: |
           brew tap osx-cross/avr
           brew trust osx-cross/avr || true
-          brew install avr-gcc@8 avr-gcc@10 avr-gcc@11 avr-gcc@12 avr-gcc@13 avr-gcc@14 avr-gcc@15
+          brew install avr-gcc@8 avr-gcc@10 avr-gcc@11 avr-gcc@12 avr-gcc@13 avr-gcc@14 avr-gcc@15 avr-gcc@16
 
       - name: Show compiler versions
         run: |
-          for version in 8 10 11 12 13 14 15; do
+          for version in 8 10 11 12 13 14 15 16; do
             echo "avr-gcc@$version: $($(brew --prefix avr-gcc@$version)/bin/avr-g++ -dumpfullversion)"
           done
 
@@ -150,6 +150,7 @@ jobs:
           - { version: 13.2.0, platform: x64-windows }
           - { version: 14.1.0, platform: x64-windows }
           - { version: 15.2.0, platform: x64-windows }
+          - { version: 16.1.0, platform: x64-windows }
     defaults:
       run:
         shell: bash

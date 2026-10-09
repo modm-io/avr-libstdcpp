@@ -10,7 +10,8 @@
 // ----------------------------------------------------------------------------
 
 #include <new>
-#include <bits/functexcept.h>
+// declares std::__throw_bad_alloc() for every GCC version
+#include <memory>
 #include <cstdlib>
 #include <cstddef>
 
