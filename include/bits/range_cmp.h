@@ -1,5 +1,7 @@
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#error "<bits/range_cmp.h> is not available with this avr-gcc version"
+#elif __GNUC__ >= 14
 #error "<bits/range_cmp.h> is not available with this avr-gcc version"
 #elif __GNUC__ >= 13
 #error "<bits/range_cmp.h> is not available with this avr-gcc version"

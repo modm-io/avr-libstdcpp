@@ -182,6 +182,15 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  for (; __first != __last; ++__first)
 	    std::_Destroy(std::__addressof(*__first));
 	}
+
+      template<typename _ForwardIterator, typename _Size>
+	static _GLIBCXX20_CONSTEXPR _ForwardIterator
+	__destroy_n(_ForwardIterator __first, _Size __count)
+	{
+	  for (; __count > 0; (void)++__first, --__count)
+	    std::_Destroy(std::__addressof(*__first));
+	  return __first;
+	}
     };
 
   template<>
@@ -190,6 +199,14 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       template<typename _ForwardIterator>
         static void
         __destroy(_ForwardIterator, _ForwardIterator) { }
+
+      template<typename _ForwardIterator, typename _Size>
+	static _ForwardIterator
+	__destroy_n(_ForwardIterator __first, _Size __count)
+	{
+	  std::advance(__first, __count);
+	  return __first;
+	}
     };
 #endif
 
@@ -205,10 +222,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       typedef typename iterator_traits<_ForwardIterator>::value_type
                        _Value_type;
 #if __cplusplus >= 201103L
-      // A deleted destructor is trivial, this ensures we reject such types:
-      static_assert(is_destructible<_Value_type>::value,
-		    "value type is destructible");
-      if constexpr (!__has_trivial_destructor(_Value_type))
+      if constexpr (!is_trivially_destructible<_Value_type>::value)
 	for (; __first != __last; ++__first)
 	  std::_Destroy(std::__addressof(*__first));
 #if __cpp_constexpr_dynamic_alloc // >= C++20
@@ -222,33 +236,6 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 #endif
     }
 
-#if __cplusplus < 201103L
-  template<bool>
-    struct _Destroy_n_aux
-    {
-      template<typename _ForwardIterator, typename _Size>
-	static _GLIBCXX20_CONSTEXPR _ForwardIterator
-	__destroy_n(_ForwardIterator __first, _Size __count)
-	{
-	  for (; __count > 0; (void)++__first, --__count)
-	    std::_Destroy(std::__addressof(*__first));
-	  return __first;
-	}
-    };
-
-  template<>
-    struct _Destroy_n_aux<true>
-    {
-      template<typename _ForwardIterator, typename _Size>
-        static _ForwardIterator
-        __destroy_n(_ForwardIterator __first, _Size __count)
-	{
-	  std::advance(__first, __count);
-	  return __first;
-	}
-    };
-#endif
-
   /**
    * Destroy a range of objects.  If the value_type of the object has
    * a trivial destructor, the compiler should optimize all of this
@@ -261,10 +248,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       typedef typename iterator_traits<_ForwardIterator>::value_type
                        _Value_type;
 #if __cplusplus >= 201103L
-      // A deleted destructor is trivial, this ensures we reject such types:
-      static_assert(is_destructible<_Value_type>::value,
-		    "value type is destructible");
-      if constexpr (!__has_trivial_destructor(_Value_type))
+      if constexpr (!is_trivially_destructible<_Value_type>::value)
 	for (; __count > 0; (void)++__first, --__count)
 	  std::_Destroy(std::__addressof(*__first));
 #if __cpp_constexpr_dynamic_alloc // >= C++20
@@ -276,7 +260,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	std::advance(__first, __count);
       return __first;
 #else
-      return std::_Destroy_n_aux<__has_trivial_destructor(_Value_type)>::
+      return std::_Destroy_aux<__has_trivial_destructor(_Value_type)>::
 	__destroy_n(__first, __count);
 #endif
     }

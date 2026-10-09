@@ -1,5 +1,7 @@
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#include "../../gcc16/include/bits/out_ptr.h"
+#elif __GNUC__ >= 14
 #include "../../gcc15/include/bits/out_ptr.h"
 #elif __GNUC__ >= 13
 #error "<bits/out_ptr.h> is not available with this avr-gcc version"

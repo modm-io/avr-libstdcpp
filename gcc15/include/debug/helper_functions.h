@@ -250,7 +250,7 @@ namespace __gnu_debug
     }
 
   template<typename _Iterator, typename _Sequence, typename _Category>
-    bool
+    _GLIBCXX20_CONSTEXPR bool
     __valid_range(const _Safe_iterator<_Iterator, _Sequence, _Category>&,
 		  const _Safe_iterator<_Iterator, _Sequence, _Category>&,
 		  typename _Distance_traits<_Iterator>::__type&);
@@ -273,7 +273,7 @@ namespace __gnu_debug
     }
 
   template<typename _Iterator, typename _Sequence, typename _Category>
-    bool
+    _GLIBCXX20_CONSTEXPR bool
     __valid_range(const _Safe_iterator<_Iterator, _Sequence, _Category>&,
 		  const _Safe_iterator<_Iterator, _Sequence, _Category>&);
 
@@ -293,7 +293,7 @@ namespace __gnu_debug
 
   template<typename _Iterator, typename _Sequence, typename _Category,
 	   typename _Size>
-    bool
+    _GLIBCXX20_CONSTEXPR bool
     __can_advance(const _Safe_iterator<_Iterator, _Sequence, _Category>&,
 		  _Size);
 
@@ -305,7 +305,7 @@ namespace __gnu_debug
 
   template<typename _Iterator, typename _Sequence, typename _Category,
 	   typename _Diff>
-    bool
+    _GLIBCXX20_CONSTEXPR bool
     __can_advance(const _Safe_iterator<_Iterator, _Sequence, _Category>&,
 		  const std::pair<_Diff, _Distance_precision>&, int);
 

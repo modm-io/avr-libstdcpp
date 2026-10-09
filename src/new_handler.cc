@@ -1,4 +1,6 @@
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#include "../gcc16/src/new_handler.cc"
+#elif __GNUC__ >= 14
 #include "../gcc15/src/new_handler.cc"
 #elif __GNUC__ >= 13
 #include "../gcc13/src/new_handler.cc"

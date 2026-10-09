@@ -1,5 +1,7 @@
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#error "<bits/move_only_function.h> is not available with this avr-gcc version"
+#elif __GNUC__ >= 14
 #include "../../gcc15/include/bits/move_only_function.h"
 #elif __GNUC__ >= 13
 #include "../../gcc13/include/bits/move_only_function.h"

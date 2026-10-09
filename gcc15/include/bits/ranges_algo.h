@@ -1014,7 +1014,7 @@ namespace ranges
 	for (; __first != __last; ++__first)
 	  if (!std::__invoke(__pred, std::__invoke(__proj, *__first)))
 	    {
-	      *__result = std::move(*__first);
+	      *__result = ranges::iter_move(__first);
 	      ++__result;
 	    }
 
@@ -1174,7 +1174,7 @@ namespace ranges
 	  if (!std::__invoke(__comp,
 			     std::__invoke(__proj, *__dest),
 			     std::__invoke(__proj, *__first)))
-	    *++__dest = std::move(*__first);
+	    *++__dest = ranges::iter_move(__first);
 	return {++__dest, __first};
       }
 
@@ -1219,6 +1219,9 @@ namespace ranges
 	if (__first == __last)
 	  return {std::move(__first), std::move(__result)};
 
+	// _GLIBCXX_RESOLVE_LIB_DEFECTS
+	// 4269. unique_copy passes arguments to its predicate backwards
+
 	// TODO: perform a closer comparison with reference implementations
 	if constexpr (forward_iterator<_Iter>)
 	  {
@@ -1251,8 +1254,8 @@ namespace ranges
 	    while (++__first != __last)
 	      {
 		if (!(bool)std::__invoke(__comp,
-					 std::__invoke(__proj, *__first),
-					 std::__invoke(__proj, __value)))
+					 std::__invoke(__proj, __value),
+					 std::__invoke(__proj, *__first)))
 		  {
 		    __value = *__first;
 		    *++__result = __value;

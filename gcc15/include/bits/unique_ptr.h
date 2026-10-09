@@ -1,5 +1,4 @@
 #pragma GCC system_header // avr-libstdcpp
-
 // unique_ptr implementation -*- C++ -*-
 
 // Copyright (C) 2008-2025 Free Software Foundation, Inc.
@@ -291,6 +290,16 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 	  __not_<is_array<_Up>>
         >;
 
+#if ! __cpp_concepts
+      template<typename _Ptr, typename = void>
+	struct _Nothrow_deref
+	: false_type { };
+
+      template<typename _Ptr>
+	struct _Nothrow_deref<_Ptr, __void_t<decltype(*std::declval<_Ptr>())>>
+	: __bool_constant<noexcept(*std::declval<_Ptr>())> { };
+#endif
+
     public:
       // Constructors.
 
@@ -444,7 +453,16 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       /// Dereference the stored pointer.
       _GLIBCXX23_CONSTEXPR
       typename add_lvalue_reference<element_type>::type
-      operator*() const noexcept(noexcept(*std::declval<pointer>()))
+      operator*() const
+      // _GLIBCXX_RESOLVE_LIB_DEFECTS
+      // 2762. unique_ptr operator*() should be noexcept
+      // 4324. unique_ptr<void>::operator* is not SFINAE-friendly
+#if __cpp_concepts
+      noexcept(noexcept(*std::declval<pointer>()))
+      requires requires { *std::declval<pointer>(); }
+#else
+      noexcept(_Nothrow_deref<pointer>::value)
+#endif
       {
 #if _GLIBCXX_USE_BUILTIN_TRAIT(__reference_converts_from_temporary)
 	// _GLIBCXX_RESOLVE_LIB_DEFECTS

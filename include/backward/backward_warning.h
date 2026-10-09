@@ -1,5 +1,7 @@
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#include "../../gcc16/include/backward/backward_warning.h"
+#elif __GNUC__ >= 14
 #include "../../gcc15/include/backward/backward_warning.h"
 #elif __GNUC__ >= 13
 #include "../../gcc13/include/backward/backward_warning.h"

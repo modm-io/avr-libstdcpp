@@ -1,5 +1,7 @@
 #pragma GCC system_header // avr-libstdcpp
-#if __GNUC__ >= 14
+#if __GNUC__ >= 16
+#include "../../gcc16/include/bits/unordered_map.h"
+#elif __GNUC__ >= 14
 #include "../../gcc15/include/bits/unordered_map.h"
 #elif __GNUC__ >= 13
 #include "../../gcc13/include/bits/unordered_map.h"
